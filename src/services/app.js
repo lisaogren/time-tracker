@@ -7,12 +7,19 @@ import pages from 'pages'
 const routes = [
   {
     path: '/',
-    title: 'Welcome',
     page: 'main'
   },
   {
     path: '/settings',
     page: 'settings'
+  },
+  {
+    path: '/login',
+    page: 'login'
+  },
+  {
+    path: '/register',
+    page: 'register'
   }
 ]
 
@@ -39,6 +46,10 @@ export default appService
 // ------------------
 
 function middleware (state, emitter) {
+  state.app = {
+    loading: true
+  }
+
   state.routes = {
     list: routes
   }
@@ -50,7 +61,11 @@ function middleware (state, emitter) {
     if (isCurrent(route)) route.active = true
   })
 
-  emitter.on('pushState', () => {
+  emitter.on('DOMContentLoaded', () => {
+    emitter.on('pushState', () => pushState)
+  })
+
+  function pushState () {
     forEach(routes, item => { item.active = false })
 
     const route = find(routes, route => isCurrent(route))
@@ -60,7 +75,7 @@ function middleware (state, emitter) {
 
       emitter.emit('render')
     }
-  })
+  }
 }
 
 function isCurrent (route) {

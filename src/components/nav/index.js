@@ -1,6 +1,6 @@
 import html from 'choo/html'
 
-import gravatar from 'utils/gravatar'
+// import gravatar from 'utils/gravatar'
 
 import './index.scss'
 
@@ -15,16 +15,17 @@ export default (state, emit) => {
           </a>
         </div>
         <div class="nav-right">
-          <a class="nav-item is-tab">
-            <figure class="image is-16x16">
-              <img src="${gravatar.url('rascarlito@gmail.com')}" alt="Profile image" title="">
-            </figure>
-            <span>RasCarlito</span>
-          </a>
           <a href="/settings" class="nav-item is-tab">Paramètres</a>
-          <a class="nav-item is-tab">Déconnexion</a>
+          <a href="/login" class="nav-item is-tab">Connexion</a>
         </div>
       </div>
     </nav>
   `
 }
+
+// <a class="nav-item is-tab">
+//   <figure class="image is-16x16">
+//     <img src="${gravatar.url('rascarlito@gmail.com')}" alt="Profile image" title="">
+//   </figure>
+//   <span>RasCarlito</span>
+// </a>

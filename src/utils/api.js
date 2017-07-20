@@ -5,14 +5,18 @@ import urlComposer from 'url-composer'
 import Promise from 'bluebird'
 
 const config = {
-  host: 'http://localhost:1337',
+  host: 'http://localhost:3000',
   services: {
-    addTimeEntry: {
-      path: '/timeEntries',
+    login: {
+      path: '/auth/local',
       method: 'post'
     },
-    getUser: {
-      path: '/users/:id',
+    register: {
+      path: '/api/users',
+      method: 'post'
+    },
+    me: {
+      path: '/api/users/me',
       method: 'get'
     }
   }
