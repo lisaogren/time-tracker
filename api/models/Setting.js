@@ -20,4 +20,4 @@ module.exports = {
       unique: true
     }
   }
-};
+}

@@ -5,16 +5,11 @@
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
 
-module.exports = {
+const merge = require('lodash/merge')
+const _super = require('sails-auth/api/models/User')
 
+const User = {
   attributes: {
-    name: {
-      type: 'string'
-    },
-    email: {
-      type: 'email',
-      unique: true
-    },
     settings: {
       collection: 'setting',
       via: 'user'
@@ -24,4 +19,6 @@ module.exports = {
       via: 'user'
     }
   }
-};
+}
+
+module.exports = merge(_super, User)

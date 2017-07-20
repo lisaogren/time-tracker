@@ -32,9 +32,9 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': {
-    view: 'homepage'
-  },
+  // '/': {
+  //   view: 'homepage'
+  // },
 
   /***************************************************************************
   *                                                                          *
@@ -46,6 +46,6 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  'get /users/:id/time-resume': 'UserController.resume'
+  // 'get /users/:id/time-resume': 'UserController.resume'
 
 };
