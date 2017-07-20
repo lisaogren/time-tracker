@@ -1,3 +1,3 @@
-# time-tracker-back
+# time-tracker
 
 a [Sails](http://sailsjs.org) application
