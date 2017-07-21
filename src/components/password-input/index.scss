@@ -1,0 +1,5 @@
+.password-component {
+  input[name=password] + a.icon {
+    pointer-events: auto;
+  }
+}

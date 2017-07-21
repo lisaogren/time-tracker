@@ -5,14 +5,22 @@ import urlComposer from 'url-composer'
 import Promise from 'bluebird'
 
 const config = {
-  host: 'http://localhost:1337',
+  host: 'http://localhost:3000',
   services: {
-    addTimeEntry: {
-      path: '/timeEntries',
+    login: {
+      path: '/auth/local',
       method: 'post'
     },
-    getUser: {
-      path: '/users/:id',
+    logout: {
+      path: '/auth/logout',
+      method: 'post'
+    },
+    register: {
+      path: '/api/users',
+      method: 'post'
+    },
+    me: {
+      path: '/api/users/me',
       method: 'get'
     }
   }
@@ -39,13 +47,16 @@ function request (serviceName, options = {}) {
       body: data,
       headers: {
         'x-requested-with': 'XMLHttpRequest'
-      }
+      },
+      withCredentials: true
     }
 
-    http[service.method || 'get'](url, options, (err, res, body) => {
-      if (err) return reject(err)
+    http[service.method || 'get'](url, options, (error, response, body) => {
+      if (error) return reject(error)
+      else if (response.statusCode >= 500) return resolve({ error: true, type: 'technical', xhr: response })
+      else if (response.statusCode >= 400) return resolve({ error: true, type: 'functional', xhr: response })
 
-      resolve(body)
+      resolve({ xhr: response, body })
     })
   })
 }

@@ -1,13 +1,32 @@
-.nav {
-  .nav-left {
+.nav-component {
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1);
+
+  .navbar-brand {
     i.fa-clock-o {
       margin-right: 5px;
     }
   }
 
-  .nav-right {
+  .navbar-end {
     figure {
       margin-right: 5px;
+    }
+  }
+
+  .field.is-grouped {
+    align-items: center;
+  }
+
+  .user-nav {
+    padding: 0.5rem 1rem;
+
+    .field.is-grouped {
+      margin-bottom: 0;
+    }
+
+    .navbar-dropdown {
+      right: 0;
+      left: auto;
     }
   }
 }
