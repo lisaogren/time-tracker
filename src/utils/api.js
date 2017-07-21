@@ -43,13 +43,16 @@ function request (serviceName, options = {}) {
       body: data,
       headers: {
         'x-requested-with': 'XMLHttpRequest'
-      }
+      },
+      withCredentials: true
     }
 
-    http[service.method || 'get'](url, options, (err, res, body) => {
-      if (err) return reject(err)
+    http[service.method || 'get'](url, options, (error, response, body) => {
+      if (error) return reject(error)
+      else if (response.statusCode >= 500) return reject(new Error('technical'))
+      else if (response.statusCode >= 400) return reject(new Error('functional'))
 
-      resolve(body)
+      resolve({ xhr: response, body })
     })
   })
 }

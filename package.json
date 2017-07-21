@@ -32,7 +32,7 @@
     "loglevel": "^1.4.1",
     "rc": "1.0.1",
     "sails": "~0.12.8",
-    "sails-auth": "^2.1.3",
+    "sails-auth": "RasCarlito/sails-auth#6c7f56460715951ab7dac3a8135faef8931095c4",
     "sails-disk": "~0.10.9",
     "sails-hook-webpack": "^2.0.4",
     "sails-mysql": "^0.11.5",

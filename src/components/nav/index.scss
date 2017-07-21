@@ -1,11 +1,13 @@
-.nav {
-  .nav-left {
+.nav-component {
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1);
+
+  .navbar-brand {
     i.fa-clock-o {
       margin-right: 5px;
     }
   }
 
-  .nav-right {
+  .navbar-end {
     figure {
       margin-right: 5px;
     }

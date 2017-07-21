@@ -93,6 +93,9 @@ module.exports = {
         proxy: {
           '/api': {
             target: 'http://localhost:1337'
+          },
+          '/auth': {
+            target: 'http://localhost:1337'
           }
         }
       }
