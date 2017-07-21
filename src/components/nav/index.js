@@ -21,7 +21,6 @@ export default (state, emit) => {
       </div>
       <div id="time-tracker-nav" class="navbar-menu">
         <div class="navbar-end">
-          <a href="/settings" class="navbar-item is-tab">Paramètres</a>
           ${userNav()}
         </div>
       </div>
@@ -33,17 +32,27 @@ export default (state, emit) => {
 
     if (user) {
       return html`
-        <a class="navbar-item is-tab">
-          <figure class="image is-16x16">
-            <img src="${user.gravatarUrl}" alt="Profile image" title="">
-          </figure>
-          <span>${user.username}</span>
+        <a class="navbar-item has-dropdown is-hoverable user-nav">
+          <a href="/profile" class="navbar-link">
+            <div class="field is-grouped">
+              <figure class="image is-16x16">
+                <img src="${user.gravatarUrl}" alt="Profile image" title="">
+              </figure>
+              <span>${user.username}</span>
+            </div>
+          </div>
+
+          <div class="navbar-dropdown">
+            <a href="/settings" class="navbar-item">Paramètres</a>
+            <hr class="navbar-divider">
+            <a class="navbar-item" onclick=${logout}>Déconnexion</a>
+          </div>
         </a>
       `
     }
 
     return html`
-      <a href="/login" class="navbar-item is-tab">Connexion</a>
+      <a href="/login" class="navbar-item">Connexion</a>
     `
   }
 
@@ -53,5 +62,10 @@ export default (state, emit) => {
 
     $el[method]('is-active')
     $($el.attr('data-target'))[method]('is-active')
+  }
+
+  function logout (e) {
+    e.preventDefault()
+    emit('user:logout')
   }
 }

@@ -11,6 +11,10 @@ const config = {
       path: '/auth/local',
       method: 'post'
     },
+    logout: {
+      path: '/auth/logout',
+      method: 'post'
+    },
     register: {
       path: '/api/users',
       method: 'post'
@@ -49,8 +53,8 @@ function request (serviceName, options = {}) {
 
     http[service.method || 'get'](url, options, (error, response, body) => {
       if (error) return reject(error)
-      else if (response.statusCode >= 500) return reject(new Error('technical'))
-      else if (response.statusCode >= 400) return reject(new Error('functional'))
+      else if (response.statusCode >= 500) return resolve({ error: true, type: 'technical', xhr: response })
+      else if (response.statusCode >= 400) return resolve({ error: true, type: 'functional', xhr: response })
 
       resolve({ xhr: response, body })
     })

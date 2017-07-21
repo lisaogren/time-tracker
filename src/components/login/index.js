@@ -2,6 +2,8 @@ import html from 'choo/html'
 import log from 'utils/log'
 import serialize from 'utils/form-serialize'
 
+import passwordInput from 'components/password-input'
+
 import './index.scss'
 
 export default (state, emit) => {
@@ -15,17 +17,12 @@ export default (state, emit) => {
             <div class="column is-one-third-desktop is-offset-4-desktop is-half-tablet is-offset-3-tablet">
               ${loginError()}
               <div class="field">
-                <label class="label">E-mail</label>
+                <label class="label">Nom d'utilisateur ou e-mail</label>
                 <div class="control">
-                  <input type="text" name="identifier" class="input" placeholder="jeanmichel@peupres.fr" />
+                  <input type="text" name="identifier" class="input" placeholder="jeanmichel@peupres.fr" required />
                 </div>
               </div>
-              <div class="field">
-                <label class="label">Mot de passe</label>
-                <div class="control">
-                  <input type="password" name="password" class="input" placeholder="1 m0t D3 PaSs3 Tr3s C0mpL!qu3" />
-                </div>
-              </div>
+              ${passwordInput()}
               <div class="field">
                 <div class="control actions">
                   ${submitButton()}
@@ -61,11 +58,11 @@ export default (state, emit) => {
   function submitButton () {
     const isConnecting = state.user.login.connecting
 
-    return html`
-      <button class="button is-primary" ${isConnecting ? 'disabled="true"' : ''}>
-        Connexion ${isConnecting ? 'en cours ...' : ''}
-      </button>
-    `
+    if (isConnecting) {
+      return html`<button class="button is-primary" disalbed="true">Connexion en cours ...</button>`
+    }
+
+    return html`<button class="button is-primary">Se connecter</button>`
   }
 
   function loginError () {

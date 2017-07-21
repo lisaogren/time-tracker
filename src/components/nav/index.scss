@@ -12,4 +12,21 @@
       margin-right: 5px;
     }
   }
+
+  .field.is-grouped {
+    align-items: center;
+  }
+
+  .user-nav {
+    padding: 0.5rem 1rem;
+
+    .field.is-grouped {
+      margin-bottom: 0;
+    }
+
+    .navbar-dropdown {
+      right: 0;
+      left: auto;
+    }
+  }
 }
