@@ -39,6 +39,7 @@ export default (state, emitter) => {
       state.user.data = user
 
       if (user) emitter.emit('render')
+      else emitter.emit('pushState', '/login')
     })
   })
 

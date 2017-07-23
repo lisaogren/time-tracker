@@ -4,7 +4,9 @@ import nav from 'components/nav'
 import footer from 'components/footer'
 
 export default (state, emit) => {
-  const { timer } = state
+  const { timer, user } = state
+
+  if (!user.data) setTimeout(() => emit('pushState', '/login'), 0)
 
   return html`
     <body>
