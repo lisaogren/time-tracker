@@ -37,7 +37,12 @@ export default (state, emit) => {
           <h3>Pas de compte encore ?</h3>
           <p>
             Pas de problème !
-            <a href="/register">Créer ton compte en quelques secondes ici</a>
+            <a href="/register" class="register-link">
+              <span>Créer ton compte en quelques secondes</span>
+              <span class="icon">
+                <i class="fa fa-arrow-right"></i>
+              </span>
+            </a>
           </p>
         </div>
       </div>

@@ -66,6 +66,19 @@ export default (state, emit) => {
             </div>
           </div>
         </form>
+        <hr>
+        <div class="content has-text-centered">
+          <h3>Tu as déjà un compte ?!</h3>
+          <p>
+            Mais quesque tu fais là !
+            <a href="/login" class="login-link">
+              <span class="icon">
+                <i class="fa fa-sign-in"></i>
+              </span>
+              <span>Connectes-toi</span>
+            </a>
+          </p>
+        </div>
       </div>
     `
   }

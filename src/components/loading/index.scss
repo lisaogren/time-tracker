@@ -1,0 +1,12 @@
+.loading-component {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+
+  .loading-message {
+    position: absolute;
+    color: white;
+  }
+}

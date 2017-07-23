@@ -1,6 +1,8 @@
 import $ from 'dominus'
 import html from 'choo/html'
 
+import noop from 'lodash/noop'
+
 // import gravatar from 'utils/gravatar'
 
 import './index.scss'
@@ -9,10 +11,7 @@ export default (state, emit) => {
   return html`
     <nav class="navbar nav-component">
       <div class="navbar-brand">
-        <a href="/" class="navbar-item">
-          <i class="fa fa-clock-o"></i>
-          <span>Time Tracker</span>
-        </a>
+        ${navItem({ label: 'Time Tracker', icon: 'clock-o', href: '/' })}
         <div class="navbar-burger burger" data-target="#time-tracker-nav" onclick=${toggle}>
           <span></span>
           <span></span>
@@ -43,16 +42,33 @@ export default (state, emit) => {
           </div>
 
           <div class="navbar-dropdown">
-            <a href="/settings" class="navbar-item">Paramètres</a>
+            ${navItem({ label: 'Paramètres', icon: 'cog', href: '/settings' })}
             <hr class="navbar-divider">
-            <a class="navbar-item" onclick=${logout}>Déconnexion</a>
+            ${navItem({ label: 'Déconnexion', icon: 'sign-out', onclick: logout })}
           </div>
         </a>
       `
     }
 
+    return navItem({ label: 'Connexion', icon: 'sign-in', href: '/login' })
+  }
+
+  function navItem (options = {}) {
+    const { onclick = noop, label = '', href = '' } = options
+
     return html`
-      <a href="/login" class="navbar-item">Connexion</a>
+      <a href="${href}" class="navbar-item" onclick=${onclick}>
+        ${options.icon ? icon(options.icon) : ''}
+        <span>${label}</span>
+      </a>
+    `
+  }
+
+  function icon (name) {
+    return html`
+      <span class="icon is-small">
+        <i class="fa fa-${name}"></i>
+      </span>
     `
   }
 

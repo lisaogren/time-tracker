@@ -33,14 +33,6 @@ export default (state, emitter) => {
     emitter.on('user:register:reset', resetRegister)
     emitter.on('user:register:store', storeRegisterValue)
     emitter.on('user:refresh', refreshUser)
-
-    // Fetch current user if any
-    getMe().then(user => {
-      state.user.data = user
-
-      if (user) emitter.emit('render')
-      else emitter.emit('pushState', '/login')
-    })
   })
 
   // ----------------------

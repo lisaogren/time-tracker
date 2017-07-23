@@ -1,15 +1,18 @@
 import find from 'lodash/find'
+import partial from 'lodash/partial'
 import forEach from 'lodash/forEach'
 import urlComposer from 'url-composer'
+
+import layout from 'components/layout'
 
 import pages from 'pages'
 
 const routes = [
   { path: '/', page: 'main' },
-  { path: '/settings', page: 'settings' },
   { path: '/login', page: 'login' },
   { path: '/register', page: 'register' },
-  { path: '/profile', page: 'profile' }
+  { path: '/settings', page: 'settings', private: true },
+  { path: '/profile', page: 'profile', private: true }
 ]
 
 const appService = {
@@ -23,7 +26,12 @@ const appService = {
 
   setupRouting () {
     forEach(routes, route => {
-      this.app.route(route.path, pages[route.page])
+      this.app.route(route.path, partial(layout, route, pages[route.page]))
+
+      route.active = false
+      route.regex = urlComposer.regex(route.path)
+
+      if (isCurrent(route)) route.active = true
     })
   }
 }
@@ -42,13 +50,6 @@ function middleware (state, emitter) {
   state.routes = {
     list: routes
   }
-
-  forEach(routes, route => {
-    route.active = false
-    route.regex = urlComposer.regex(route.path)
-
-    if (isCurrent(route)) route.active = true
-  })
 
   emitter.on('DOMContentLoaded', () => {
     emitter.on('pushState', () => pushState)
