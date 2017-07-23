@@ -5,22 +5,11 @@ import urlComposer from 'url-composer'
 import pages from 'pages'
 
 const routes = [
-  {
-    path: '/',
-    page: 'main'
-  },
-  {
-    path: '/settings',
-    page: 'settings'
-  },
-  {
-    path: '/login',
-    page: 'login'
-  },
-  {
-    path: '/register',
-    page: 'register'
-  }
+  { path: '/', page: 'main' },
+  { path: '/settings', page: 'settings' },
+  { path: '/login', page: 'login' },
+  { path: '/register', page: 'register' },
+  { path: '/profile', page: 'profile' }
 ]
 
 const appService = {
