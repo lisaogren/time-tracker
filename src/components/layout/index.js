@@ -5,12 +5,16 @@ import footer from 'components/footer'
 import loading from 'components/loading'
 
 export default (route, page, state, emit) => {
-  if (state.app.loading || (route.private && !state.user.data)) {
+  if (route.private && !state.user.data) {
     if (route.private) {
       emit('replaceState', '/')
     }
 
-    return html`<body></body>`
+    return html`
+      <body>
+        ${showLoading()}
+      </body>
+    `
   }
 
   return html`

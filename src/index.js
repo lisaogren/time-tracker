@@ -1,4 +1,5 @@
 import 'font-awesome/scss/font-awesome.scss'
+import 'animate.css'
 import 'index.scss'
 
 import choo from 'choo'
