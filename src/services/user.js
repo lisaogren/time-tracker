@@ -60,10 +60,10 @@ export default (state, emitter) => {
       if (response.error) return error(response)
 
       resetLoginError()
-      emitter.emit('pushState', '/')
 
       return getMe().then(user => {
         state.user.data = user
+        emitter.emit('pushState', '/')
       })
     }
 

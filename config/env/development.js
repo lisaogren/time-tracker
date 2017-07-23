@@ -19,6 +19,8 @@ module.exports = {
 
   models: {
     connection: 'mysqlDev'
-  }
+  },
 
-};
+  appUrl: 'http://localhost:3000'
+
+}
