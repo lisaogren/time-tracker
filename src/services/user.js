@@ -32,6 +32,7 @@ export default (state, emitter) => {
     emitter.on('user:register', register)
     emitter.on('user:register:reset', resetRegister)
     emitter.on('user:register:store', storeRegisterValue)
+    emitter.on('user:refresh', refreshUser)
 
     // Fetch current user if any
     getMe().then(user => {
@@ -107,6 +108,10 @@ export default (state, emitter) => {
     state.user.register.data[data.field] = data.value
   }
 
+  function refreshUser () {
+    return getMe().then(storeUser).then(render)
+  }
+
   // ----------------------
   // Helpers
   // ----------------------
@@ -145,6 +150,12 @@ export default (state, emitter) => {
 
       return res.body
     })
+  }
+
+  function storeUser (user) {
+    state.user.data = user
+
+    return user
   }
 
   function render () {

@@ -22,6 +22,14 @@ const config = {
     me: {
       path: '/api/users/me',
       method: 'get'
+    },
+    updateSettings: {
+      path: '/api/settings/:id',
+      method: 'put'
+    },
+    addSettings: {
+      path: '/api/settings',
+      method: 'post'
     }
   }
 }
