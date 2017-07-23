@@ -4,6 +4,8 @@ import first from 'lodash/first'
 import date from 'utils/date'
 import serialize from 'utils/form-serialize'
 
+import technicalError from 'components/technical-error'
+
 import './index.scss'
 
 export default (state, emit) => {
@@ -72,7 +74,7 @@ export default (state, emit) => {
       <div class="columns">
         <div class="column is-one-third-desktop is-offset-4-desktop is-half-tablet is-offset-3-tablet">
           <div class="notification is-warning settings-error">
-            <span>Une erreur technique est survenu...<br>Déso quoi :(</span>
+            ${technicalError()}
           </div>
         </div>
       </div>

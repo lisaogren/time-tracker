@@ -3,6 +3,7 @@ import log from 'utils/log'
 import serialize from 'utils/form-serialize'
 
 import passwordInput from 'components/password-input'
+import technicalError from 'components/technical-error'
 
 import './index.scss'
 
@@ -61,7 +62,7 @@ export default (state, emit) => {
     if (state.user.login.error) {
       const message = state.user.login.error === 'functional'
         ? html`<span>Connection impossible...<br>T'as dû te tromper d'identiant</span>`
-        : html`<span>Une erreur technique est survenu...<br>Déso quoi :(</span>`
+        : technicalError()
 
       return html`
         <div class="notification is-warning login-error">
