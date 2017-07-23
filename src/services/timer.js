@@ -12,6 +12,7 @@ export default (state, emitter) => {
   emitter.on('DOMContentLoaded', () => {
     emitter.on('timer:start', startTimer)
     emitter.on('timer:stop', stopTimer)
+    emitter.on('timer:setCurrentData', setCurrentData)
   })
 
   function startTimer () {
@@ -39,6 +40,12 @@ export default (state, emitter) => {
     log.debug(state.timer)
 
     emitter.emit('render')
+  }
+
+  function setCurrentData () {
+    const user = get(state.user, 'data')
+
+    state.timer.entries = user.timeEntries
   }
 
   function setStarted () {
