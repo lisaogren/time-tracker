@@ -45,6 +45,10 @@ export default (state, emit) => {
     </section>
   `
 
+  // ----------------------
+  // Sub-components
+  // ----------------------
+
   function settingsSuccess () {
     if (!state.settings.success) return ''
 
@@ -75,6 +79,10 @@ export default (state, emit) => {
     `
   }
 
+  // ----------------------
+  // Listeners
+  // ----------------------
+
   function submitSettings (e) {
     e.preventDefault()
 
@@ -82,6 +90,10 @@ export default (state, emit) => {
 
     emit('settings:save', data)
   }
+
+  // ----------------------
+  // Helpers
+  // ----------------------
 
   function getDuration (field) {
     const value = settings[field]

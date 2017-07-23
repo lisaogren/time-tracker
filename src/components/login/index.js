@@ -43,17 +43,9 @@ export default (state, emit) => {
     </section>
   `
 
-  function submitLogin (e) {
-    e.preventDefault()
-
-    const data = serialize(e.currentTarget)
-
-    // Validate data locally
-
-    log.debug('[components/login] Submitted login form:', data)
-
-    emit('user:login', data)
-  }
+  // ----------------------
+  // Sub-components
+  // ----------------------
 
   function submitButton () {
     const isConnecting = state.user.login.connecting
@@ -77,5 +69,21 @@ export default (state, emit) => {
         </div>
       `
     }
+  }
+
+  // ----------------------
+  // Listeners
+  // ----------------------
+
+  function submitLogin (e) {
+    e.preventDefault()
+
+    const data = serialize(e.currentTarget)
+
+    // Validate data locally
+
+    log.debug('[components/login] Submitted login form:', data)
+
+    emit('user:login', data)
   }
 }

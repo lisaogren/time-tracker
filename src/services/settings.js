@@ -5,15 +5,21 @@ import api from 'utils/api'
 import date from 'utils/date'
 
 export default (state, emitter) => {
+  // Initialise settings state
   state.settings = {
     error: false,
     success: false
   }
 
+  // Wait for DOM before registering emitter events to speed up first paint
   emitter.on('DOMContentLoaded', () => {
     emitter.on('settings:save', saveSettings)
     emitter.on('settings:reset', resetSettings)
   })
+
+  // ----------------------
+  // Listeners
+  // ----------------------
 
   function saveSettings (data) {
     const userId = get(state.user, 'data.id')
