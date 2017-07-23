@@ -19,10 +19,7 @@ export default (state, emitter) => {
 
         state.app.loading = false
 
-        const user = state.user.data
-
-        if (user) emitter.emit('render')
-        else setTimeout(() => emitter.emit('pushState', '/login'), 0)
+        emitter.emit('render')
       })
   }
 }

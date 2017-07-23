@@ -10,8 +10,8 @@ import pages from 'pages'
 const routes = [
   { path: '/', page: 'main' },
   { path: '/login', page: 'login' },
+  { path: '/register', page: 'register' },
   { path: '/settings', page: 'settings', private: true },
-  { path: '/register', page: 'register', private: true },
   { path: '/profile', page: 'profile', private: true }
 ]
 
