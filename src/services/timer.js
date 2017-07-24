@@ -20,7 +20,7 @@ export default (state, emitter) => {
 
     setCurrent(now)
     addEntry(now).then(() => {
-      log.debug('[ timer ] Added time entry', now)
+      log.debug('[services/timer] Added time entry', now)
     })
     setStarted()
 
@@ -33,7 +33,7 @@ export default (state, emitter) => {
     const now = new Date()
 
     addEntry(now).then(() => {
-      log.debug('[ timer ] Added time entry', now)
+      log.debug('[services/timer] Added time entry', now)
     })
     setStopped()
 
@@ -69,6 +69,6 @@ export default (state, emitter) => {
 
     const data = { date, user }
 
-    return api.addTimeEntry({ data })
+    return api.addEntry({ data })
   }
 }

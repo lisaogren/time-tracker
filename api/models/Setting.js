@@ -15,6 +15,9 @@ module.exports = {
       type: 'integer',
       defaultsTo: 1 * 60 * 60 * 1000
     },
+    start: {
+      type: 'datetime'
+    },
     user: {
       model: 'user',
       unique: true

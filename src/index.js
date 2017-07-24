@@ -1,9 +1,13 @@
+import 'manifest.json'
+
 import 'font-awesome/scss/font-awesome.scss'
 import 'animate.css'
 import 'index.scss'
 
 import choo from 'choo'
 import chooLog from 'choo-log'
+
+import sw from 'utils/sw'
 
 import appService from 'services/app'
 import bootService from 'services/boot'
@@ -12,6 +16,8 @@ import userService from 'services/user'
 import settingsService from 'services/settings'
 
 const app = choo()
+
+sw.register()
 
 // if (debug) !
 app.use(chooLog())

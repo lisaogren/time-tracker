@@ -14,7 +14,7 @@ export default (state, emit) => {
   return html`
     <section class="section settings-component">
       <div class="container">
-        <h1 class="title">Paramètres généraux</h1>
+        <h1 class="title has-text-centered">Paramètres généraux</h1>
         <hr>
         <form onsubmit=${submitSettings}>
           ${settingsSuccess()}
@@ -33,6 +33,14 @@ export default (state, emit) => {
                 <label class="label">Durée de la pause déjeuner</label>
                 <div class="control">
                   <input type="text" name="lunchBreak" class="input" placeholder="1h" value="${getDuration('lunchBreak')}" />
+                </div>
+              </div>
+            </div>
+            <div class="column">
+              <div class="field">
+                <label class="label">Début de contrat</label>
+                <div class="control">
+                  <input type="date" name="start" class="input" placeholder="" />
                 </div>
               </div>
             </div>
