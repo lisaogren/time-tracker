@@ -1,6 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CompressionPlugin = require("compression-webpack-plugin")
 const ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin')
 
 module.exports = {
@@ -61,22 +62,23 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'runtime'
-    }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src/index.html')
     }),
     new ServiceWorkerWebpackPlugin({
       entry: path.resolve(__dirname, 'src/sw.js')
     }),
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'runtime'
+    // }),
     // new webpack.optimize.UglifyJsPlugin({
     //   minimize: true,
     //   output: { comments: false },
     //   compress: { warnings: false, drop_console: true }
     // }),
+    // new CompressionPlugin(),
     new webpack.HotModuleReplacementPlugin()
   ],
   devtool: 'source-map',
@@ -86,7 +88,7 @@ module.exports = {
     path: path.resolve(__dirname, '.tmp/public')
   },
   entry: {
-    index: path.resolve(__dirname, 'src/index.js')
+    index: path.resolve(__dirname, 'src/index.js'),
     'dev-server': 'webpack/hot/dev-server',
     'dev-server-client': 'webpack-dev-server/client?http://localhost:3000/'
   }

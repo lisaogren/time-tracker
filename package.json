@@ -48,6 +48,7 @@
     "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "choo-log": "^7.1.0",
+    "compression-webpack-plugin": "^1.0.0",
     "css-loader": "^0.28.4",
     "eslint": "^4.2.0",
     "file-loader": "^0.11.2",
@@ -61,8 +62,8 @@
     "standard-loader": "^6.0.1",
     "style-loader": "^0.18.2",
     "url-loader": "^0.5.9",
+    "web-app-manifest-loader": "^0.1.1",
     "webpack": "^3.3.0",
-    "webpack-dev-server": "^2.5.1",
-    "web-app-manifest-loader": "^0.1.1"
+    "webpack-dev-server": "^2.5.1"
   }
 }
