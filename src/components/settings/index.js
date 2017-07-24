@@ -36,6 +36,14 @@ export default (state, emit) => {
                 </div>
               </div>
             </div>
+            <div class="column">
+              <div class="field">
+                <label class="label">Début de contrat</label>
+                <div class="control">
+                  <input type="date" name="start" class="input" placeholder="" />
+                </div>
+              </div>
+            </div>
           </div>
           <div class="field">
             <div class="control actions">

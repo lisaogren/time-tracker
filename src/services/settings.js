@@ -25,10 +25,8 @@ export default (state, emitter) => {
     const userId = get(state.user, 'data.id')
     const currentSettings = first(get(state.user, 'data.settings'))
 
-    data = {
-      day: date.durationToMilliseconds(data.day),
-      lunchBreak: date.durationToMilliseconds(data.lunchBreak)
-    }
+    data.day = date.durationToMilliseconds(data.day)
+    data.lunchBreak = date.durationToMilliseconds(data.lunchBreak)
 
     let request
 
