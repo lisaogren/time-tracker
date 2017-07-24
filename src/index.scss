@@ -9,3 +9,17 @@ body {
     flex: 1;
   }
 }
+
+.is-very-large {
+  font-size: 2rem !important;
+}
+
+h1.title {
+  @media screen and (max-width: $tablet) {
+    font-size: 1.5rem !important;
+
+    .icon i {
+      font-size: 1.5rem !important;
+    }
+  }
+}

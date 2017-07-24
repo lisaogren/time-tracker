@@ -5,8 +5,11 @@ import footer from 'components/footer'
 import loading from 'components/loading'
 
 export default (route, page, state, emit) => {
-  if (route.private && !state.user.data) {
-    if (route.private) {
+  const isLoading = state.app.loading
+  const isRestricted = route.private && !state.user.data && !isLoading
+
+  if (isLoading || isRestricted) {
+    if (isRestricted) {
       emit('replaceState', '/')
     }
 

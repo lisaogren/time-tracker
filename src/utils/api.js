@@ -30,6 +30,10 @@ const config = {
     addSettings: {
       path: '/api/settings',
       method: 'post'
+    },
+    addEntry: {
+      path: '/api/timeEntries',
+      method: 'post'
     }
   }
 }

@@ -14,7 +14,7 @@ export default (state, emit) => {
   return html`
     <section class="section settings-component">
       <div class="container">
-        <h1 class="title">Paramètres généraux</h1>
+        <h1 class="title has-text-centered">Paramètres généraux</h1>
         <hr>
         <form onsubmit=${submitSettings}>
           ${settingsSuccess()}
