@@ -43,10 +43,10 @@ module.exports.connections = {
   mysqlDev: {
     adapter: 'sails-mysql',
     host: 'localhost',
-    user: 'root', //optional
-    password: 'root', //optional
-    database: 'time_tracker' //optional
-  },
+    user: 'root', // optional
+    password: 'root', // optional
+    database: 'time_tracker' // optional
+  }
 
   /***************************************************************************
   *                                                                          *
@@ -82,11 +82,10 @@ module.exports.connections = {
   //   database: 'YOUR_POSTGRES_DB' //optional
   // }
 
-
   /***************************************************************************
   *                                                                          *
   * More adapters: https://github.com/balderdashy/sails                      *
   *                                                                          *
   ***************************************************************************/
 
-};
+}

@@ -48,4 +48,4 @@ module.exports.routes = {
 
   // 'get /users/:id/time-resume': 'UserController.resume'
 
-};
+}
