@@ -18,6 +18,33 @@ module.exports = {
     start: {
       type: 'datetime'
     },
+
+    payed: {
+      type: 'float',
+      defaultsTo: 0
+    },
+    extraDays: {
+      type: 'float',
+      defaultsTo: 0
+    },
+    extraHours: {
+      type: 'float',
+      defaultsTo: 0
+    },
+
+    payedTaken: {
+      type: 'float',
+      defaultsTo: 0
+    },
+    extraDaysTaken: {
+      type: 'float',
+      defaultsTo: 0
+    },
+    extraHoursTaken: {
+      type: 'float',
+      defaultsTo: 0
+    },
+
     user: {
       model: 'user',
       unique: true

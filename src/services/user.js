@@ -55,6 +55,8 @@ export default (state, emitter) => {
 
       return getMe().then(user => {
         state.user.data = user
+        state.timer.entries = user.timeEntries
+
         emitter.emit('pushState', '/')
       })
     }
@@ -67,6 +69,7 @@ export default (state, emitter) => {
   function logout () {
     api.logout().then(() => {
       state.user = extend({}, defaultState)
+
       emitter.emit('pushState', '/')
     })
   }
@@ -81,6 +84,7 @@ export default (state, emitter) => {
 
       state.user.register.success = true
       state.user.register.username = response.body.username
+
       resetRegisterError()
     }
 
@@ -113,6 +117,7 @@ export default (state, emitter) => {
     state.user.register.success = false
     state.user.register.username = null
     state.user.register.data = {}
+
     resetRegisterError()
   }
 

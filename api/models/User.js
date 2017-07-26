@@ -14,6 +14,10 @@ const User = {
       collection: 'setting',
       via: 'user'
     },
+    vacancies: {
+      collection: 'vacancy',
+      via: 'user'
+    },
     timeEntries: {
       collection: 'timeEntry',
       via: 'user'

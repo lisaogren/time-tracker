@@ -19,27 +19,26 @@ export default (state, emitter) => {
     const now = new Date()
 
     setCurrent(now)
+    setStarted()
     addEntry(now).then(() => {
       log.debug('[services/timer] Added time entry', now)
+      log.debug(state.timer)
+
+      emitter.emit('render')
     })
-    setStarted()
-
-    log.debug(state.timer)
-
-    emitter.emit('render')
   }
 
   function stopTimer () {
     const now = new Date()
 
+    setCurrent(now)
+    setStopped()
     addEntry(now).then(() => {
       log.debug('[services/timer] Added time entry', now)
+      log.debug(state.timer)
+
+      emitter.emit('render')
     })
-    setStopped()
-
-    log.debug(state.timer)
-
-    emitter.emit('render')
   }
 
   function setCurrentData () {
@@ -61,14 +60,16 @@ export default (state, emitter) => {
   }
 
   function addEntry (date) {
-    state.timer.entries.push(date)
-
     const user = get(state.user, 'data.id')
 
     if (!user) throw new Error('[services/timer] Missing user id')
 
     const data = { date, user }
 
-    return api.addEntry({ data })
+    return api.addEntry({ data }).then(res => {
+      state.timer.entries.push(res.body)
+
+      return res.body
+    })
   }
 }

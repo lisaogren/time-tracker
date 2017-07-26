@@ -17,7 +17,10 @@ const controller = {
 
     if (!id) return res.ok(null)
 
-    User.findOne({ id }).populate('settings').populate('timeEntries')
+    User.findOne({ id })
+      .populate('settings')
+      .populate('timeEntries')
+      .populate('vacancies')
       .then(user => res.ok(user))
       .catch(() => res.ok(null))
   }

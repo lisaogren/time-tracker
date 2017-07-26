@@ -15,12 +15,12 @@
       }
 
       p {
-        font-size: 1.7rem;
+        font-size: 1.1rem;
         color: $text;
 
-        @media screen and (max-width: $tablet) {
-          font-size: 1.3rem;
-        }
+        // @media screen and (max-width: $tablet) {
+        //   font-size: 1.3rem;
+        // }
 
         &.is-negative {
           color: $red;

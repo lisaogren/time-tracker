@@ -1,6 +1,9 @@
 import html from 'choo/html'
+
 import get from 'lodash/get'
 import first from 'lodash/first'
+
+// import log from 'utils/log'
 import date from 'utils/date'
 import serialize from 'utils/form-serialize'
 
@@ -40,7 +43,7 @@ export default (state, emit) => {
               <div class="field">
                 <label class="label">Début de contrat</label>
                 <div class="control">
-                  <input type="date" name="start" class="input" placeholder="" />
+                  <input type="date" name="start" class="input" placeholder="" onchange=${selectDate} />
                 </div>
               </div>
             </div>
@@ -99,6 +102,13 @@ export default (state, emit) => {
     const data = serialize(e.currentTarget)
 
     emit('settings:save', data)
+  }
+
+  function selectDate (e) {
+    // const value = e.currentTarget.value
+
+    // log.debug('[components/settings] is work day', value, date.isWorkDay(value))
+    // log.debug('[components/settings] work days', date.workDaysInMonth(value))
   }
 
   // ----------------------

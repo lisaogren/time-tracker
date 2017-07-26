@@ -1,15 +1,14 @@
 import html from 'choo/html'
 
-import get from 'lodash/get'
+// import get from 'lodash/get'
 import filter from 'lodash/filter'
 import first from 'lodash/first'
+import last from 'lodash/last'
 import isEmpty from 'lodash/isEmpty'
-import forEach from 'lodash/forEach'
 
 import isToday from 'date-fns/is_today'
-import isThisWeek from 'date-fns/is_this_week'
-import isThisMonth from 'date-fns/is_this_month'
-import differenceInMilliseconds from 'date-fns/difference_in_milliseconds'
+import isBefore from 'date-fns/is_before'
+import subDays from 'date-fns/sub_days'
 
 import date from 'utils/date'
 
@@ -17,44 +16,17 @@ import './index.scss'
 
 export default (state, emit) => {
   const { timer } = state
+  const noEntries = isEmpty(timer.entries)
 
-  const settings = first(get(state.user, 'data.settings')) || {}
+  // const settings = first(get(state.user, 'data.settings')) || {}
 
   return html`
     <section class="section dashboard-component">
       <div class="container">
-        <h1 class="title has-text-centered">
-          <span class="icon is-medium">
-            <i class="fa fa-clock-o"></i>
-          </span>
-          <span>Résumé</span>
-        </h1>
+        ${noEntries ? showNoEntries() : showDashboard()}
+
         <hr>
-        <div class="columns resume">
-          <div class="column is-half-mobile">
-            <p>Aujourd'hui</p>
-          </div>
-          <div class="column is-half-mobile">
-            ${resume('today')}
-          </div>
-        </div>
-        <div class="columns resume">
-          <div class="column is-half-mobile">
-            <p>Cette semaine</p>
-          </div>
-          <div class="column is-half-mobile">
-            ${resume('week')}
-          </div>
-        </div>
-        <div class="columns resume">
-          <div class="column is-half-mobile">
-            <p>Ce mois-ci</p>
-          </div>
-          <div class="column is-half-mobile">
-            ${resume('month')}
-          </div>
-        </div>
-        <hr>
+
         <p class="has-text-centered">
           ${toggleTimerButton()}
         </p>
@@ -70,7 +42,7 @@ export default (state, emit) => {
     return html`
       <button
         data-ui="toggle-timer"
-        class="button is-very-large is-${timer.started ? 'info' : 'primary'}"
+        class="button is-large is-${timer.started ? 'info' : 'primary'}"
         onclick=${toggle}
       >
         <span class="icon">
@@ -81,11 +53,82 @@ export default (state, emit) => {
     `
   }
 
-  function showTime ({ type, value }) {
-    value = date.millisecondsToDuration(value)
+  function showTime ({ value, showSign = false }) {
+    let type
+
+    if (showSign) {
+      if (value < 0) type = 'is-negative'
+      else if (value > 0) type = 'is-positive'
+      else showSign = false
+    }
 
     return html`
-      <p class="is-${type}">${type === 'positive' ? '+' : '-'} ${value}</p>
+      <p class="${type}">${date.millisecondsToDuration({ time: value, showSign })}</p>
+    `
+  }
+
+  function showBalance (type) {
+    return showTime({ value: balance(type), showSign: true })
+  }
+
+  function showWorkTime () {
+    return showTime({ value: workTime() })
+  }
+
+  function showDashboard () {
+    return html`
+      <div>
+        <h1 class="title has-text-centered">
+          <span class="icon is-medium">
+            <i class="fa fa-clock-o"></i>
+          </span>
+          <span>Résumé</span>
+        </h1>
+
+        <hr>
+
+        <h2 class="subtitle">
+          Heures Supp'
+        </h2>
+        <div class="columns resume">
+          <div class="column is-half-mobile">
+            <p>Aujourd'hui</p>
+          </div>
+          <div class="column is-half-mobile">
+            ${showBalance('today')}
+          </div>
+        </div>
+        <div class="columns resume">
+          <div class="column is-half-mobile">
+            <p>Total</p>
+          </div>
+          <div class="column is-half-mobile">
+            ${showBalance('total')}
+          </div>
+        </div>
+
+        <hr>
+
+        <h2 class="subtitle">
+          Temps travaillé
+        </h2>
+        <div class="columns resume">
+          <div class="column is-half-mobile">
+            <p>Aujourd'hui</p>
+          </div>
+          <div class="column is-half-mobile">
+            ${showWorkTime()}
+          </div>
+        </div>
+      </div>
+    `
+  }
+
+  function showNoEntries () {
+    return html`
+      <p>
+        Tu n'as pas de données pour le moment
+      </p>
     `
   }
 
@@ -102,75 +145,34 @@ export default (state, emit) => {
   // Helpers
   // ----------------------
 
-  function filterEntries (condition) {
-    return filter(timer.entries, entry => condition(entry.date))
-  }
+  function balance (type) {
+    const now = new Date()
 
-  function resume (type) {
-    const entries = filterEntries(getDateFilter(type))
-    const max = getSettings(type)
+    let entries = timer.entries
+    let start
+    let end
 
-    if (isEmpty(entries)) {
-      return showTime({ type: 'negative', value: max })
-    }
+    if (type === 'today') {
+      start = now
+      end = now
+      entries = filter(entries, entry => isToday(entry.date))
+    } else if (type === 'total') {
+      start = first(entries).date
+      end = subDays(last(entries).date, 1)
 
-    const done = getCumulatedWorkTime(entries)
-
-    return showTime({
-      type: getValueType(done < max),
-      value: max - done
-    })
-  }
-
-  function getDateFilter (type) {
-    const filters = {
-      today: isToday,
-      week: isThisWeek,
-      month: isThisMonth
-    }
-
-    return filters[type]
-  }
-
-  function getCumulatedWorkTime (entries) {
-    let done = 0
-
-    forEach(entries, (entry, i) => {
-      let next = entries[i + 1]
-
-      if (!next) next = { date: new Date() }
-
-      if (isEven(i)) {
-        done += differenceInMilliseconds(next.date, entry.date)
+      if (isBefore(end, start)) {
+        return 0
       }
-    })
 
-    return done
-  }
-
-  function getSettings (type) {
-    const settingsMap = {
-      today: settings.day,
-      week: getWeekTotal(),
-      month: getMonthTotal()
+      entries = filter(entries, entry => !isToday(entry.date))
     }
 
-    return settingsMap[type]
+    return date.getWorkTimeBalance(start, end, entries)
   }
 
-  function getValueType (isNegative) {
-    return isNegative ? 'negative' : 'positive'
-  }
+  function workTime () {
+    const entries = filter(timer.entries, entry => isToday(entry.date))
 
-  function getWeekTotal () {
-    return settings.day * 5
-  }
-
-  function getMonthTotal () {
-    return settings.day * 20
-  }
-
-  function isEven (i) {
-    return !(i % 2)
+    return date.getCumulatedWorkTime(entries)
   }
 }
