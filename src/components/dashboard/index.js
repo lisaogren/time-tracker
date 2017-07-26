@@ -1,9 +1,10 @@
 import html from 'choo/html'
 
-import get from 'lodash/get'
+// import get from 'lodash/get'
 import filter from 'lodash/filter'
 import first from 'lodash/first'
 import last from 'lodash/last'
+import isEmpty from 'lodash/isEmpty'
 
 import isToday from 'date-fns/is_today'
 import isBefore from 'date-fns/is_before'
@@ -15,12 +16,68 @@ import './index.scss'
 
 export default (state, emit) => {
   const { timer } = state
+  const noEntries = isEmpty(timer.entries)
 
   // const settings = first(get(state.user, 'data.settings')) || {}
 
   return html`
     <section class="section dashboard-component">
       <div class="container">
+        ${noEntries ? showNoEntries() : showDashboard()}
+
+        <hr>
+
+        <p class="has-text-centered">
+          ${toggleTimerButton()}
+        </p>
+      </div>
+    </section>
+  `
+
+  // ----------------------
+  // Sub-components
+  // ----------------------
+
+  function toggleTimerButton () {
+    return html`
+      <button
+        data-ui="toggle-timer"
+        class="button is-large is-${timer.started ? 'info' : 'primary'}"
+        onclick=${toggle}
+      >
+        <span class="icon">
+          <i class="fa fa-${timer.started ? 'stop' : 'play'}"></i>
+        </span>
+        <span>${timer.started ? 'Arrêter' : `C'est parti !`}</span>
+      </button>
+    `
+  }
+
+  function showTime ({ value, showSign = false }) {
+    let type
+
+    if (showSign) {
+      if (value < 0) type = 'is-negative'
+      else if (value > 0) type = 'is-positive'
+      else showSign = false
+    }
+
+    return html`
+      <p class="${type}">${date.millisecondsToDuration({ time: value, showSign })}</p>
+    `
+  }
+
+  function showBalance (type) {
+    return showTime({ value: balance(type), showSign: true })
+  }
+
+  function showWorkTime () {
+    return showTime({ value: workTime() })
+  }
+
+  function showDashboard () {
+    return html`
+      <div>
         <h1 class="title has-text-centered">
           <span class="icon is-medium">
             <i class="fa fa-clock-o"></i>
@@ -60,49 +117,19 @@ export default (state, emit) => {
             <p>Aujourd'hui</p>
           </div>
           <div class="column is-half-mobile">
-            <p>6h30</p>
+            ${showWorkTime()}
           </div>
         </div>
-
-        <hr>
-
-        <p class="has-text-centered">
-          ${toggleTimerButton()}
-        </p>
       </div>
-    </section>
-  `
-
-  // ----------------------
-  // Sub-components
-  // ----------------------
-
-  function toggleTimerButton () {
-    return html`
-      <button
-        data-ui="toggle-timer"
-        class="button is-large is-${timer.started ? 'info' : 'primary'}"
-        onclick=${toggle}
-      >
-        <span class="icon">
-          <i class="fa fa-${timer.started ? 'stop' : 'play'}"></i>
-        </span>
-        <span>${timer.started ? 'Arrêter' : `C'est parti !`}</span>
-      </button>
     `
   }
 
-  function showTime (value) {
-    const type = value < 0 ? 'negative' : 'positive'
-    value = date.millisecondsToDuration(value)
-
+  function showNoEntries () {
     return html`
-      <p class="is-${type}">${value}</p>
+      <p>
+        Tu n'as pas de données pour le moment
+      </p>
     `
-  }
-
-  function showBalance (type) {
-    return showTime(balance(type))
   }
 
   // ----------------------
@@ -119,27 +146,33 @@ export default (state, emit) => {
   // ----------------------
 
   function balance (type) {
-    const today = new Date()
+    const now = new Date()
 
     let entries = timer.entries
     let start
     let end
 
     if (type === 'today') {
-      start = today
-      end = today
+      start = now
+      end = now
       entries = filter(entries, entry => isToday(entry.date))
     } else if (type === 'total') {
       start = first(entries).date
       end = subDays(last(entries).date, 1)
 
       if (isBefore(end, start)) {
-        end = last(entries).date
+        return 0
       }
 
       entries = filter(entries, entry => !isToday(entry.date))
     }
 
     return date.getWorkTimeBalance(start, end, entries)
+  }
+
+  function workTime () {
+    const entries = filter(timer.entries, entry => isToday(entry.date))
+
+    return date.getCumulatedWorkTime(entries)
   }
 }

@@ -1,6 +1,6 @@
 import parseInt from 'lodash/parseInt'
 import filter from 'lodash/filter'
-import first from 'lodash/first'
+// import first from 'lodash/first'
 import forEach from 'lodash/forEach'
 
 import getDay from 'date-fns/get_day'
@@ -17,7 +17,7 @@ const oneHourInMilliseconds = 1 * 60 * 60 * 1000
 const oneMinuteInMilliseconds = 1 * 60 * 1000
 const durationRegex = /^(\d{0,2})h?(\d{0,2})m?i?n?$/i
 
-function millisecondsToDuration (time) {
+function millisecondsToDuration ({ time, showSign = false }) {
   const isNegative = time < 0
   time = Math.abs(time)
 
@@ -31,13 +31,17 @@ function millisecondsToDuration (time) {
 
   const negative = (isNegative ? '-' : '+') + ' '
 
+  let value
+
   if (time === 0 || time < oneHourInMilliseconds) {
-    return negative + minutes + 'm'
+    value = minutes + 'm'
   } else if ((time % oneHourInMilliseconds) === 0) {
-    return negative + hours + 'h'
+    value = hours + 'h'
+  } else {
+    value = hours + 'h' + minutes
   }
 
-  return negative + hours + 'h' + minutes
+  return (showSign ? negative : '') + value
 }
 
 function durationToMilliseconds (duration = '') {

@@ -1,8 +1,9 @@
 const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CompressionPlugin = require('compression-webpack-plugin')
+// const CompressionPlugin = require('compression-webpack-plugin')
 const ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin')
+// const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
 module.exports = {
   module: {
@@ -64,11 +65,15 @@ module.exports = {
   plugins: [
     new webpack.NoEmitOnErrorsPlugin(),
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'src/index.html')
+      template: path.resolve(__dirname, 'src/index.html'),
+      favicon: path.resolve(__dirname, 'src/favicon.png')
     }),
     new ServiceWorkerWebpackPlugin({
       entry: path.resolve(__dirname, 'src/sw.js')
     }),
+    // new FaviconsWebpackPlugin({
+    //   logo: path.resolve(__dirname, 'src/favicon.png')
+    // }),
     new webpack.optimize.OccurrenceOrderPlugin(),
     // new webpack.optimize.CommonsChunkPlugin({
     //   name: 'runtime'
