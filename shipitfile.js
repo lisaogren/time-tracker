@@ -10,6 +10,7 @@ module.exports = function (shipit) {
       deployTo: `/home/rascarlito/www/${name}`,
       repositoryUrl: `git@github.com:RasCarlito/${name}.git`,
       keepReleases: 3,
+      branch: 'deploy',
       ignores: ['.git', 'src'],
       dirToCopy: `${workspace}`
     },
