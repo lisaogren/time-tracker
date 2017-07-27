@@ -31,12 +31,15 @@ module.exports = {
    * Set the log level in production environment to "silent"                 *
    ***************************************************************************/
 
-  log: {
-    level: 'silent'
-  },
+  // log: {
+  //   level: 'silent'
+  // },
 
   hooks: {
     webpack: false
-  }
+  },
+
+  appUrl: 'https://time-tracker.carlogren.com'
+  // appUrl: 'http://time-tracker.localhost'
 
 }

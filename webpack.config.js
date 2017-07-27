@@ -24,9 +24,6 @@ let plugins = [
 ]
 
 if (production) {
-  entry['dev-server'] = 'webpack/hot/dev-server'
-  entry['dev-server-client'] = 'webpack-dev-server/client?http://localhost:3000/'
-
   delete html.favicon
 
   plugins = plugins.concat([
@@ -44,6 +41,9 @@ if (production) {
     new CompressionPlugin()
   ])
 } else {
+  entry['dev-server'] = 'webpack/hot/dev-server'
+  entry['dev-server-client'] = 'webpack-dev-server/client?http://localhost:3000/'
+
   plugins = plugins.concat([
     new webpack.HotModuleReplacementPlugin()
   ])
