@@ -1,9 +1,53 @@
 const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-// const CompressionPlugin = require('compression-webpack-plugin')
+const CompressionPlugin = require('compression-webpack-plugin')
 const ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin')
-// const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
+
+const production = process.env.NODE_ENV === 'production'
+
+const entry = {
+  index: path.resolve(__dirname, 'src/index.js')
+}
+const html = {
+  template: path.resolve(__dirname, 'src/index.html'),
+  favicon: path.resolve(__dirname, 'src/favicon.png')
+}
+let plugins = [
+  new webpack.NoEmitOnErrorsPlugin(),
+  new HtmlWebpackPlugin(html),
+  new ServiceWorkerWebpackPlugin({
+    entry: path.resolve(__dirname, 'src/sw.js')
+  }),
+  new webpack.optimize.OccurrenceOrderPlugin()
+]
+
+if (production) {
+  entry['dev-server'] = 'webpack/hot/dev-server'
+  entry['dev-server-client'] = 'webpack-dev-server/client?http://localhost:3000/'
+
+  delete html.favicon
+
+  plugins = plugins.concat([
+    new FaviconsWebpackPlugin({
+      logo: path.resolve(__dirname, 'src/favicon.png')
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'runtime'
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      minimize: true,
+      output: { comments: false },
+      compress: { warnings: false, drop_console: true }
+    }),
+    new CompressionPlugin()
+  ])
+} else {
+  plugins = plugins.concat([
+    new webpack.HotModuleReplacementPlugin()
+  ])
+}
 
 module.exports = {
   module: {
@@ -62,39 +106,12 @@ module.exports = {
       'src'
     ]
   },
-  plugins: [
-    new webpack.NoEmitOnErrorsPlugin(),
-    new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'src/index.html'),
-      favicon: path.resolve(__dirname, 'src/favicon.png')
-    }),
-    new ServiceWorkerWebpackPlugin({
-      entry: path.resolve(__dirname, 'src/sw.js')
-    }),
-    // new FaviconsWebpackPlugin({
-    //   logo: path.resolve(__dirname, 'src/favicon.png')
-    // }),
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   name: 'runtime'
-    // }),
-    // new webpack.optimize.UglifyJsPlugin({
-    //   minimize: true,
-    //   output: { comments: false },
-    //   compress: { warnings: false, drop_console: true }
-    // }),
-    // new CompressionPlugin(),
-    new webpack.HotModuleReplacementPlugin()
-  ],
-  devtool: 'source-map',
+  plugins,
+  devtool: production ? '' : 'source-map',
   output: {
     filename: '[name].bundle.js',
     chunkFilename: '[name].bundle.js',
     path: path.resolve(__dirname, '.tmp/public')
   },
-  entry: {
-    index: path.resolve(__dirname, 'src/index.js'),
-    'dev-server': 'webpack/hot/dev-server',
-    'dev-server-client': 'webpack-dev-server/client?http://localhost:3000/'
-  }
+  entry
 }

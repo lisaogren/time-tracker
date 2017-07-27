@@ -31,7 +31,8 @@
   "scripts": {
     "debug": "node debug app.js",
     "start": "node app.js",
-    "lint": "standard | snazzy"
+    "lint": "standard | snazzy",
+    "build": "NODE_ENV=production webpack"
   },
   "main": "app.js",
   "repository": {
@@ -60,6 +61,8 @@
     "postcss-loader": "^2.0.6",
     "sass-loader": "^6.0.6",
     "serviceworker-webpack-plugin": "^0.2.3",
+    "shipit": "^1.0.2",
+    "shipit-deploy": "^2.5.1",
     "snazzy": "^7.0.0",
     "standard": "^10.0.2",
     "standard-loader": "^6.0.1",
