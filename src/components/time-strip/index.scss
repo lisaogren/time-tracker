@@ -1,0 +1,19 @@
+.time-strip-component {
+  .columns:last-child {
+    margin-bottom: 0.75rem;
+  }
+
+  .scale .column {
+    padding-left: 0
+  }
+
+  .worked {
+    background: green;
+    flex-grow: unset;
+    flex-basis: unset;
+    padding: 0;
+    height: 24px;
+    width: 25%;
+    margin-left: 75%;
+  }
+}

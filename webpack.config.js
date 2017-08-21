@@ -28,16 +28,17 @@ if (production) {
 
   plugins = plugins.concat([
     new FaviconsWebpackPlugin({
-      logo: path.resolve(__dirname, 'src/favicon.png')
+      logo: path.resolve(__dirname, 'src/favicon.png'),
+      emitStats: false
     }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'runtime'
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      minimize: true,
-      output: { comments: false },
-      compress: { warnings: false, drop_console: true }
-    }),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   minimize: true,
+    //   output: { comments: false },
+    //   compress: { warnings: false, drop_console: false }
+    // }),
     new CompressionPlugin()
   ])
 } else {
@@ -107,7 +108,8 @@ module.exports = {
     ]
   },
   plugins,
-  devtool: production ? '' : 'source-map',
+  // devtool: production ? '' : 'source-map',
+  devtool: 'source-map',
   output: {
     filename: '[name].bundle.js',
     chunkFilename: '[name].bundle.js',
