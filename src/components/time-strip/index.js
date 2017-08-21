@@ -1,61 +1,84 @@
 import html from 'choo/html'
 
 import filter from 'lodash/filter'
+import forEach from 'lodash/forEach'
+import range from 'lodash/range'
 
-import getYear from 'date-fns/get_year'
-import getMonth from 'date-fns/get_month'
-import getDate from 'date-fns/get_date'
 import isBefore from 'date-fns/is_before'
 import isAfter from 'date-fns/is_after'
+import startOfDay from 'date-fns/start_of_day'
+
+import { differenceInDecimalHours, getNoon } from 'utils/date'
 
 import log from 'utils/log'
+import { isOdd, isEven } from 'utils/numbers'
 
 import './index.scss'
 
+const oneHourInPercent = 100 / 12
+
 export default (date, entries, emit) => {
-  const noon = new Date(getYear(date), getMonth(date), getDate(date), 12, 1)
+  const start = startOfDay(date)
+  const noon = getNoon(date)
   const morningEntries = filter(entries, entry => isBefore(entry.date, noon))
   const afternoonEntries = filter(entries, entry => isAfter(entry.date, noon))
+
+  if (isOdd(morningEntries.length)) {
+    morningEntries.push({ date: noon })
+  }
+
+  if (isOdd(afternoonEntries.length)) {
+    afternoonEntries.unshift({ date: noon })
+  }
 
   log.debug('morning entries', morningEntries)
   log.debug('afternoon entries', afternoonEntries)
 
   return html`
     <div class="time-strip-component">
-      <div class="columns scale">
-        <div class="column">0h</div>
-        <div class="column">1h</div>
-        <div class="column">2h</div>
-        <div class="column">3h</div>
-        <div class="column">4h</div>
-        <div class="column">5h</div>
-        <div class="column">6h</div>
-        <div class="column">7h</div>
-        <div class="column">8h</div>
-        <div class="column">9h</div>
-        <div class="column">10h</div>
-        <div class="column">11h</div>
-      </div>
-      <div class="columns work">
-        <div class="column worked"></div>
-      </div>
-      <div class="columns scale">
-        <div class="column">12h</div>
-        <div class="column">13h</div>
-        <div class="column">14h</div>
-        <div class="column">15h</div>
-        <div class="column">16h</div>
-        <div class="column">17h</div>
-        <div class="column">18h</div>
-        <div class="column">19h</div>
-        <div class="column">20h</div>
-        <div class="column">21h</div>
-        <div class="column">22h</div>
-        <div class="column">23h</div>
-      </div>
-      <div class="columns work">
-        <div class="column worked"></div>
-      </div>
+      ${scaleBlocks(0, 12)}
+      ${workBlocks(start, morningEntries)}
+      ${scaleBlocks(12, 24)}
+      ${workBlocks(noon, afternoonEntries)}
     </div>
   `
+
+  function workBlocks (start, entries) {
+    const blocks = []
+
+    forEach(entries, (entry, i) => {
+      let next = entries[i + 1]
+
+      if (isEven(i)) {
+        const left = oneHourInPercent * differenceInDecimalHours(entry.date, start)
+        const width = (oneHourInPercent * differenceInDecimalHours(next.date, start)) - left
+
+        blocks.push({ left, width })
+      }
+    })
+
+    return html`
+      <div class="columns work">
+        ${blocks.map(workBlock)}
+      </div>
+    `
+  }
+
+  function workBlock (block) {
+    return html`<div class="column worked" style="left: ${block.left}%; width: ${block.width}%;"></div>`
+  }
+
+  function scaleBlocks (start, end) {
+    const hours = range(start, end)
+
+    return html`
+      <div class="columns scale">
+        ${hours.map(scaleBlock)}
+      </div>
+    `
+  }
+
+  function scaleBlock (i) {
+    return html`<div class="column">${i}h</div>`
+  }
 }
