@@ -17,26 +17,29 @@ module.exports = {
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
-  // models: {
-  //   connection: 'someMysqlServer'
-  // },
+  models: {
+    connection: 'mysqlProd'
+  },
 
   /***************************************************************************
    * Set the port in the production environment to 80                        *
    ***************************************************************************/
 
-  // port: 80,
+  port: 2345,
 
   /***************************************************************************
    * Set the log level in production environment to "silent"                 *
    ***************************************************************************/
 
   // log: {
-  //   level: "silent"
-  // }
+  //   level: 'silent'
+  // },
 
   hooks: {
     webpack: false
-  }
+  },
+
+  appUrl: 'https://time-tracker.carlogren.com'
+  // appUrl: 'http://time-tracker.localhost'
 
 }
