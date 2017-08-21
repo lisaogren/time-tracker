@@ -1,6 +1,5 @@
 import parseInt from 'lodash/parseInt'
 import filter from 'lodash/filter'
-// import first from 'lodash/first'
 import forEach from 'lodash/forEach'
 
 import getDay from 'date-fns/get_day'
@@ -8,8 +7,6 @@ import getDate from 'date-fns/get_date'
 import getMonth from 'date-fns/get_month'
 import getYear from 'date-fns/get_year'
 import addDays from 'date-fns/add_days'
-// import startOfMonth from 'date-fns/start_of_month'
-// import endOfMonth from 'date-fns/end_of_month'
 import eachDay from 'date-fns/each_day'
 import differenceInMilliseconds from 'date-fns/difference_in_milliseconds'
 

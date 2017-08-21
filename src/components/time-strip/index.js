@@ -10,7 +10,6 @@ import startOfDay from 'date-fns/start_of_day'
 
 import { differenceInDecimalHours, getNoon } from 'utils/date'
 
-import log from 'utils/log'
 import { isOdd, isEven } from 'utils/numbers'
 
 import './index.scss'
@@ -30,9 +29,6 @@ export default (date, entries, emit) => {
   if (isOdd(afternoonEntries.length)) {
     afternoonEntries.unshift({ date: noon })
   }
-
-  log.debug('morning entries', morningEntries)
-  log.debug('afternoon entries', afternoonEntries)
 
   return html`
     <div class="time-strip-component">

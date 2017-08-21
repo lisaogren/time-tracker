@@ -2,13 +2,12 @@ import $ from 'dominus'
 import html from 'choo/html'
 
 import map from 'lodash/map'
+import range from 'lodash/range'
 import filter from 'lodash/filter'
 import groupBy from 'lodash/groupBy'
 
 import format from 'date-fns/format'
-// import getYear from 'date-fns/get_year'
-// import isThisMonth from 'date-fns/is_this_month'
-import isThisYear from 'date-fns/is_this_year'
+import getYear from 'date-fns/get_year'
 import isSameMonth from 'date-fns/is_same_month'
 import isSameYear from 'date-fns/is_same_year'
 
@@ -19,8 +18,6 @@ import timeStrip from 'components/time-strip'
 export default (state, emit) => {
   const current = state.details
   const currentlySelectedDate = new Date(current.year, current.month)
-
-  console.log(currentlySelectedDate)
 
   const entries = groupEntries(
     filter(state.timer.entries, entry => isSameMonth(entry.date, currentlySelectedDate))
@@ -98,22 +95,11 @@ export default (state, emit) => {
     const month = new Date(current.year, i)
     const isSame = isSameMonth(month, currentlySelectedDate)
 
-    if (isSame) {
-      return html`<option value="${i}" selected="selected">${label}</option>`
-    }
-
-    return html`<option value="${i}">${label}</option>`
+    return html`<option value="${i}" ${isSame ? 'selected' : ''}>${label}</option>`
   }
 
   function getYearSelector () {
-    let year = 1985
-
-    const years = []
-
-    do {
-      years.push(year)
-      year += 1
-    } while (!isThisYear(new Date(year - 1, 1, 1)))
+    const years = range(1985, getYear(new Date()) + 1)
 
     return html`
       <div class="select" data-ui="year-selector">
