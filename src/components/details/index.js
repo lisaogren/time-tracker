@@ -1,39 +1,24 @@
-import $ from 'dominus'
 import html from 'choo/html'
 
 import map from 'lodash/map'
-import range from 'lodash/range'
 import filter from 'lodash/filter'
 import groupBy from 'lodash/groupBy'
 
 import format from 'date-fns/format'
-import getYear from 'date-fns/get_year'
 import isSameMonth from 'date-fns/is_same_month'
-import isSameYear from 'date-fns/is_same_year'
 
-import log from 'utils/log'
+// import log from 'utils/log'
 
 import timeStrip from 'components/time-strip'
+import dateSelector from 'components/date-selector'
 
 export default (state, emit) => {
-  const current = state.details
+  const current = state.dateSelector
   const currentlySelectedDate = new Date(current.year, current.month)
 
   const entries = groupEntries(
     filter(state.timer.entries, entry => isSameMonth(entry.date, currentlySelectedDate))
   )
-
-  const monthSelector = getMonthSelector()
-  monthSelector.isSameNode = function (target) {
-    return state.app.current === 'details' &&
-      $(target).attr('data-ui') === 'month-selector'
-  }
-
-  const yearSelector = getYearSelector()
-  yearSelector.isSameNode = function (target) {
-    return state.app.current === 'details' &&
-      $(target).attr('data-ui') === 'year-selector'
-  }
 
   return html`
     <section class="section details-component">
@@ -41,8 +26,7 @@ export default (state, emit) => {
         <h1 class="title has-text-centered">Détails</h1>
         <hr>
         <form>
-          ${monthSelector}
-          ${yearSelector}
+          ${dateSelector({ state, emit, change: 'details:select-date', ui: 'details' })}
         </form>
         <br>
         <table class="table is-fullwidth entries">
@@ -76,63 +60,21 @@ export default (state, emit) => {
     // ${map(entries, entry => html`<div>${format(entry.date, 'HH:mm:ss')}</div>`)}
   }
 
-  function getMonthSelector () {
-    const months = [
-      'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-      'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'
-    ]
-
-    return html`
-      <div class="select" data-ui="month-selector">
-        <select class="month-selector" onchange=${selectMonth}>
-          ${map(months, (month, i) => monthOption(month, i))}
-        </select>
-      </div>
-    `
-  }
-
-  function monthOption (label, i) {
-    const month = new Date(current.year, i)
-    const isSame = isSameMonth(month, currentlySelectedDate)
-
-    return html`<option value="${i}" ${isSame ? 'selected' : ''}>${label}</option>`
-  }
-
-  function getYearSelector () {
-    const years = range(1985, getYear(new Date()) + 1)
-
-    return html`
-      <div class="select" data-ui="year-selector">
-        <select class="year-selector" onchange=${selectYear}>
-          ${map(years, year => yearOption(year))}
-        </select>
-      </div>
-    `
-  }
-
-  function yearOption (year) {
-    return html`
-      <option value="${year}" ${isSameYear(new Date(year, 1), currentlySelectedDate) ? 'selected' : ''}>
-        ${year}
-      </option>
-    `
-  }
-
   // ----------------------
   // Listeners
   // ----------------------
 
-  function selectMonth (e) {
-    log.debug('Selected month:', e.currentTarget.value)
-
-    emit('details:month', e.currentTarget.value)
-  }
-
-  function selectYear (e) {
-    log.debug('Selected year', e.currentTarget.value)
-
-    emit('details:year', e.currentTarget.value)
-  }
+  // function selectMonth (e) {
+  //   log.debug('Selected month:', e.currentTarget.value)
+  //
+  //   emit('details:month', e.currentTarget.value)
+  // }
+  //
+  // function selectYear (e) {
+  //   log.debug('Selected year', e.currentTarget.value)
+  //
+  //   emit('details:year', e.currentTarget.value)
+  // }
 
   // ----------------------
   // Helpers

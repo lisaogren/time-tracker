@@ -24,6 +24,7 @@
     "sails-auth": "github:RasCarlito/sails-auth#6c7f56460715951ab7dac3a8135faef8931095c4",
     "sails-disk": "~0.10.10",
     "sails-hook-webpack": "^2.0.4",
+    "sails-mongo": "^0.12.2",
     "sails-mysql": "^0.11.5",
     "url-composer": "^1.14.0",
     "xhr": "^2.4.0"

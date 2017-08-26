@@ -15,6 +15,7 @@ import timerService from 'services/timer'
 import userService from 'services/user'
 import settingsService from 'services/settings'
 import detailsService from 'services/details'
+import dateSelectorService from 'components/date-selector/service'
 
 const app = choo()
 
@@ -28,6 +29,7 @@ app.use(userService)
 app.use(settingsService)
 app.use(timerService)
 app.use(detailsService)
+app.use(dateSelectorService)
 
 appService.init(app)
 

@@ -33,9 +33,7 @@ export default (state, emit) => {
             </span>
           </h3>
           <p>
-            Il ne te reste plus qu'a te connecter via
-            <a href="/login" onclick=${goToLogin}>le formulaire de connexion</a>
-            pour utiliser Time Tracker !
+            Il ne te reste plus qu'a te connecter via <a href="/login" onclick=${goToLogin}>le formulaire de connexion</a> pour utiliser Time Tracker !
           </p>
         </div>
       </div>

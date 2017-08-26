@@ -5,10 +5,10 @@
 
   .scale {
     margin-top: -0.25rem;
+    font-size: 0.9rem;
 
     .column {
       padding: 0 0 0 0.25rem;
-      margin-top: 0.25rem;
       border-left: black solid 1px;
       box-sizing: border-box;
     }
@@ -16,7 +16,7 @@
 
   .work {
     position: relative;
-    height: 24px;
+    height: 1rem;
     margin-top: -0.5rem;
   }
 
@@ -27,6 +27,6 @@
     flex-grow: unset;
     flex-basis: unset;
     padding: 0;
-    height: 24px;
+    height: 100%;
   }
 }

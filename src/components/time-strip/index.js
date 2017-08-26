@@ -1,45 +1,28 @@
 import html from 'choo/html'
 
-import filter from 'lodash/filter'
 import forEach from 'lodash/forEach'
 import range from 'lodash/range'
 
-import isBefore from 'date-fns/is_before'
-import isAfter from 'date-fns/is_after'
 import startOfDay from 'date-fns/start_of_day'
 
-import { differenceInDecimalHours, getNoon } from 'utils/date'
-
-import { isOdd, isEven } from 'utils/numbers'
+import { differenceInDecimalHours } from 'utils/date'
+import { isEven } from 'utils/numbers'
 
 import './index.scss'
 
-const oneHourInPercent = 100 / 12
+const oneHourInPercent = 100 / 24
 
 export default (date, entries, emit) => {
   const start = startOfDay(date)
-  const noon = getNoon(date)
-  const morningEntries = filter(entries, entry => isBefore(entry.date, noon))
-  const afternoonEntries = filter(entries, entry => isAfter(entry.date, noon))
-
-  if (isOdd(morningEntries.length)) {
-    morningEntries.push({ date: noon })
-  }
-
-  if (isOdd(afternoonEntries.length)) {
-    afternoonEntries.unshift({ date: noon })
-  }
 
   return html`
     <div class="time-strip-component">
-      ${scaleBlocks(0, 12)}
-      ${workBlocks(start, morningEntries)}
-      ${scaleBlocks(12, 24)}
-      ${workBlocks(noon, afternoonEntries)}
+      ${scaleBlocks()}
+      ${workBlocks()}
     </div>
   `
 
-  function workBlocks (start, entries) {
+  function workBlocks () {
     const blocks = []
 
     forEach(entries, (entry, i) => {
@@ -53,25 +36,17 @@ export default (date, entries, emit) => {
       }
     })
 
-    return html`
-      <div class="columns work">
-        ${blocks.map(workBlock)}
-      </div>
-    `
+    return html`<div class="columns work">${blocks.map(workBlock)}</div>`
   }
 
   function workBlock (block) {
     return html`<div class="column worked" style="left: ${block.left}%; width: ${block.width}%;"></div>`
   }
 
-  function scaleBlocks (start, end) {
-    const hours = range(start, end)
+  function scaleBlocks () {
+    const hours = range(0, 24, 2)
 
-    return html`
-      <div class="columns scale">
-        ${hours.map(scaleBlock)}
-      </div>
-    `
+    return html`<div class="columns is-mobile scale">${hours.map(scaleBlock)}</div>`
   }
 
   function scaleBlock (i) {

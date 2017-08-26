@@ -54,7 +54,7 @@ module.exports.connections = {
     user: process.env.TIME_TRACKER_DB_USER,
     password: process.env.TIME_TRACKER_DB_PWD,
     database: process.env.TIME_TRACKER_DB_NAME
-  }
+  },
 
   /***************************************************************************
   *                                                                          *
@@ -64,14 +64,14 @@ module.exports.connections = {
   * Run: npm install sails-mongo                                             *
   *                                                                          *
   ***************************************************************************/
-  // someMongodbServer: {
-  //   adapter: 'sails-mongo',
-  //   host: 'localhost',
-  //   port: 27017,
-  //   user: 'username', //optional
-  //   password: 'password', //optional
-  //   database: 'your_mongo_db_name_here' //optional
-  // },
+  mongoDev: {
+    adapter: 'sails-mongo',
+    host: 'localhost',
+    port: 27017,
+    user: 'time-tracker',
+    password: 'tt',
+    database: 'time-tracker'
+  }
 
   /***************************************************************************
   *                                                                          *
