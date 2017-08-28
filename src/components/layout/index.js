@@ -10,7 +10,7 @@ export default (route, page, state, emit) => {
 
   if (isLoading || isRestricted) {
     if (isRestricted) {
-      emit('replaceState', '/')
+      emit(state.events.REPLACESTATE, '/')
     }
 
     return html`

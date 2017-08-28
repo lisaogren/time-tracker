@@ -1,5 +1,6 @@
 import get from 'lodash/get'
 import first from 'lodash/first'
+import extend from 'lodash/extend'
 
 import api from 'utils/api'
 import date from 'utils/date'
@@ -11,10 +12,15 @@ export default (state, emitter) => {
     success: false
   }
 
+  state.events = extend(state.events, {
+    SETTINGS_SAVE: 'settings:save',
+    SETTINGS_RESET: 'settings:reset'
+  })
+
   // Wait for DOM before registering emitter events to speed up first paint
-  emitter.on('DOMContentLoaded', () => {
-    emitter.on('settings:save', saveSettings)
-    emitter.on('settings:reset', resetSettings)
+  emitter.on(state.events.DOMCONTENTLOADED, () => {
+    emitter.on(state.events.SETTINGS_SAVE, saveSettings)
+    emitter.on(state.events.SETTINGS_RESET, resetSettings)
   })
 
   // ----------------------
@@ -48,7 +54,7 @@ export default (state, emitter) => {
       state.settings.success = true
       state.settings.error = false
 
-      emitter.emit('user:refresh')
+      emitter.emit(state.events.USER_REFRESH)
     }
 
     function error () {

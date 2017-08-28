@@ -1,4 +1,6 @@
 import get from 'lodash/get'
+import extend from 'lodash/extend'
+
 import log from 'utils/log'
 import api from 'utils/api'
 
@@ -9,10 +11,16 @@ export default (state, emitter) => {
     entries: []
   }
 
+  state.events = extend(state.events, {
+    TIMER_START: 'timer:start',
+    TIMER_STOP: 'timer:stop',
+    TIMER_SET_CURRENT: 'timer:setCurrent'
+  })
+
   emitter.on('DOMContentLoaded', () => {
-    emitter.on('timer:start', startTimer)
-    emitter.on('timer:stop', stopTimer)
-    emitter.on('timer:setCurrentData', setCurrentData)
+    emitter.on(state.events.TIMER_START, startTimer)
+    emitter.on(state.events.TIMER_STOP, stopTimer)
+    emitter.on(state.events.TIMER_SET_CURRENT, setCurrentData)
   })
 
   function startTimer () {
@@ -24,7 +32,7 @@ export default (state, emitter) => {
       log.debug('[services/timer] Added time entry', now)
       log.debug(state.timer)
 
-      emitter.emit('render')
+      emitter.emit(state.events.RENDER)
     })
   }
 
@@ -37,7 +45,7 @@ export default (state, emitter) => {
       log.debug('[services/timer] Added time entry', now)
       log.debug(state.timer)
 
-      emitter.emit('render')
+      emitter.emit(state.events.RENDER)
     })
   }
 

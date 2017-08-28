@@ -1,10 +1,11 @@
 import html from 'choo/html'
 import urlComposer from 'url-composer'
-import Promise from 'bluebird'
 
 import find from 'lodash/find'
 import partial from 'lodash/partial'
 import forEach from 'lodash/forEach'
+
+import loadPage from './pages'
 
 import log from 'utils/log'
 
@@ -15,7 +16,8 @@ const routes = [
   { path: '/login', page: 'login' },
   { path: '/register', page: 'register' },
   { path: '/settings', page: 'settings', private: true },
-  { path: '/profile', page: 'profile', private: true }
+  { path: '/profile', page: 'profile', private: true },
+  { path: '/details', page: 'details', private: true }
 ]
 
 const appService = {
@@ -40,30 +42,12 @@ const appService = {
 
   pages: {},
 
-  loadPage (name, cb) {
-    if (name === 'main') {
-      import(/* webpackChunkName: "main" */ 'pages/main').then(module => cb(module))
-    }
-    else if (name === 'login') {
-      import(/* webpackChunkName: "login" */ 'pages/login').then(module => cb(module))
-    }
-    else if (name === 'register') {
-      import(/* webpackChunkName: "register" */ 'pages/register').then(module => cb(module))
-    }
-    else if (name === 'settings') {
-      import(/* webpackChunkName: "settings" */ 'pages/settings').then(module => cb(module))
-    }
-    else if (name === 'profile') {
-      import(/* webpackChunkName: "profile" */ 'pages/profile').then(module => cb(module))
-    }
-  },
-
   loadFactory (route, layout) {
     log.debug('[services/app] Generating route callback', route)
 
     return (...args) => {
       if (!this.pages[route.page]) {
-        this.loadPage(route.page, module => {
+        loadPage(route.page, module => {
           this.pages[route.page] = partial(layout, route, module.default)
           this.emitter.emit('render')
         })
@@ -86,26 +70,27 @@ function middleware (service, state, emitter) {
   service.emitter = emitter
 
   state.app = {
-    loading: true
+    loading: true,
+    current: null
   }
 
   state.routes = {
     list: routes
   }
 
-  emitter.on('DOMContentLoaded', () => {
-    emitter.on('pushState', () => pushState)
+  setCurrent()
+
+  emitter.on(state.events.DOMCONTENTLOADED, () => {
+    emitter.on(state.events.PUSHSTATE, setCurrent)
   })
 
-  function pushState () {
+  function setCurrent () {
     forEach(routes, item => { item.active = false })
-
     const route = find(routes, route => isCurrent(route))
 
     if (route) {
       route.active = true
-
-      emitter.emit('render')
+      state.app.current = route.page
     }
   }
 }

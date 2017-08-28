@@ -19,7 +19,7 @@ export default (state, emitter) => {
 
         state.app.loading = false
 
-        emitter.emit('render')
+        emitter.emit(state.events.RENDER)
       })
   }
 }

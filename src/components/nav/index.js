@@ -19,12 +19,26 @@ export default (state, emit) => {
         </div>
       </div>
       <div id="time-tracker-nav" class="navbar-menu">
+        ${mainNav()}
         <div class="navbar-end">
           ${userNav()}
         </div>
       </div>
     </nav>
   `
+
+  function mainNav () {
+    const user = state.user.data
+
+    if (!user) return
+
+    return html`
+      <div class="navbar-start">
+        ${navItem({ label: 'Résumé', icon: 'area-chart', href: '/' })}
+        ${navItem({ label: 'Détails', icon: 'table', href: '/details' })}
+      </div>
+    `
+  }
 
   function userNav () {
     const user = state.user.data
@@ -82,6 +96,6 @@ export default (state, emit) => {
 
   function logout (e) {
     e.preventDefault()
-    emit('user:logout')
+    emit(state.events.USER_LOGOUT)
   }
 }

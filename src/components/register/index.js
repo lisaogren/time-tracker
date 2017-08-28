@@ -33,9 +33,7 @@ export default (state, emit) => {
             </span>
           </h3>
           <p>
-            Il ne te reste plus qu'a te connecter via
-            <a href="/login" onclick=${goToLogin}>le formulaire de connexion</a>
-            pour utiliser Time Tracker !
+            Il ne te reste plus qu'a te connecter via <a href="/login" onclick=${goToLogin}>le formulaire de connexion</a> pour utiliser Time Tracker !
           </p>
         </div>
       </div>
@@ -156,14 +154,14 @@ export default (state, emit) => {
 
     log.debug('[components/register] Submitted register form:', data)
 
-    emit('user:register', data)
+    emit(state.events.USER_REGISTER, data)
   }
 
   function goToLogin (e) {
     e.preventDefault()
 
-    emit('user:register:reset')
-    emit('pushState', $(e.currentTarget).attr('href'))
+    emit(state.events.USER_REGISTER_RESET)
+    emit(state.events.PUSHSTATE, $(e.currentTarget).attr('href'))
   }
 
   function storeValue (e) {
@@ -172,6 +170,6 @@ export default (state, emit) => {
     const field = $el.attr('name')
     const value = $el.value()
 
-    emit('user:register:store', { field, value })
+    emit(state.events.USER_REGISTER_STORE, { field, value })
   }
 }
