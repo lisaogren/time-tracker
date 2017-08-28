@@ -34,6 +34,7 @@ if (production) {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'runtime'
     }),
+    // @TODO Re-activate
     // new webpack.optimize.UglifyJsPlugin({
     //   minimize: true,
     //   output: { comments: false },
@@ -108,6 +109,7 @@ module.exports = {
     ]
   },
   plugins,
+  // @TODO Re-activate
   // devtool: production ? '' : 'source-map',
   devtool: 'source-map',
   output: {

@@ -19,6 +19,7 @@ import dateSelectorService from 'components/date-selector/service'
 
 const app = choo()
 
+// @TODO Re-activate
 // sw.register()
 
 // if (debug) !
