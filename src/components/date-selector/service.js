@@ -1,10 +1,16 @@
 import extend from 'lodash/extend'
 
+import getDate from 'date-fns/get_date'
+import getMonth from 'date-fns/get_month'
+import getYear from 'date-fns/get_year'
+import getDaysInMonth from 'date-fns/get_days_in_month'
+
 export default (state, emitter) => {
-  state.dateSelector = {
-    year: 2017,
-    month: 7
-  }
+  const now = new Date()
+
+  const defaultState = { year: getYear(now), month: getMonth(now), day: getDate(now) }
+
+  state.dateSelector = {}
 
   state.events = extend(state.events, {
     DATESELECTOR_CHANGE: 'dateSelector:change'
@@ -14,7 +20,19 @@ export default (state, emitter) => {
     emitter.on(state.events.DATESELECTOR_CHANGE, setSelectedDate)
   })
 
-  function setSelectedDate ({ type, value }) {
-    state.dateSelector[type] = value
+  function setSelectedDate ({ ui, type, value }) {
+    if (!state.dateSelector[ui]) state.dateSelector[ui] = defaultState
+
+    value = parseInt(value)
+
+    const data = state.dateSelector[ui]
+
+    data[type] = value
+
+    if (type === 'year' || type === 'month') {
+      const maxDays = getDaysInMonth(new Date(data.year, data.month))
+
+      if (data.day > maxDays) data.day = maxDays
+    }
   }
 }

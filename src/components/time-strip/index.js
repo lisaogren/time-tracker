@@ -36,7 +36,7 @@ export default (date, entries, emit) => {
         const left = oneHourInPercent * differenceInDecimalHours(entry.date, start)
         const width = (oneHourInPercent * differenceInDecimalHours(next.date, start)) - left
 
-        blocks.push({ left, width })
+        blocks.push({ left, width, startId: entry.id, endId: next.id })
       }
     })
 
@@ -44,7 +44,15 @@ export default (date, entries, emit) => {
   }
 
   function workBlock (block) {
-    return html`<div class="column worked" style="left: ${block.left}%; width: ${block.width}%;"></div>`
+    return html`
+      <div
+        class="column worked"
+        data-start-id="${block.startId}"
+        data-end-id="${block.endId}"
+        style="left: ${block.left}%; width: ${block.width}%;"
+      >
+      </div>
+    `
   }
 
   function scaleBlocks () {

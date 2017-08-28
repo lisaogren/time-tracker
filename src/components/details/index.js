@@ -1,7 +1,9 @@
+import $ from 'dominus'
 import html from 'choo/html'
 
 import map from 'lodash/map'
 import filter from 'lodash/filter'
+import partial from 'lodash/partial'
 
 import { format } from 'utils/date'
 import eachDay from 'date-fns/each_day'
@@ -20,7 +22,7 @@ import './index.scss'
 export default (state, emit) => {
   log.debug('[components/details] Init component')
 
-  const current = state.dateSelector
+  const current = state.dateSelector.details || { year: 2017, month: 7 }
   const date = new Date(current.year, current.month)
   const entries = state.timer.entries
 
@@ -29,13 +31,23 @@ export default (state, emit) => {
     day => ({ date: day, entries: filter(entries, entry => isSameDay(entry.date, day)) })
   )
 
+  const detailsDateSelector = dateSelector({
+    ui: 'details',
+    change: 'details:select-date',
+    show: {
+      day: false
+    },
+    state,
+    emit
+  })
+
   return html`
     <section class="section details-component">
       <div class="container">
         <h1 class="title has-text-centered">Détails</h1>
         <hr>
         <form>
-          ${dateSelector({ state, emit, change: 'details:select-date', ui: 'details' })}
+          ${detailsDateSelector}
         </form>
         <br>
         <table class="table is-fullwidth entries">
@@ -58,8 +70,10 @@ export default (state, emit) => {
   // ----------------------
 
   function showEntryLine ({ date, entries }) {
+    const onClick = partial(edit, date, entries)
+
     return html`
-      <tr class="${isWeekend(date) ? 'is-weekend' : ''}">
+      <tr class="entry ${isWeekend(date) ? 'is-weekend' : ''}" onclick=${onClick}>
         <td>
           ${format(date, 'dddd')}<br>
           ${format(date, 'DD/MM/YYYY')}
@@ -69,5 +83,18 @@ export default (state, emit) => {
         </td>
       </tr>
     `
+  }
+
+  // ----------------------
+  // Listeners
+  // ----------------------
+
+  function edit (date, entries, e) {
+    e.preventDefault()
+
+    const $el = $(e.target)
+
+    log.debug(`[components/details] Editing entries for ${date}`, entries)
+    log.debug($el.attr('data-start-id'), $el.attr('data-end-id'))
   }
 }

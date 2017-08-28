@@ -2,11 +2,15 @@
 
 .details-component {
   .entries {
-    .is-weekend {
-      background-color: #f5f5f5;
+    .entry {
+      cursor: pointer;
 
-      &:hover {
-        background-color: $table-row-hover-background-color;
+      &.is-weekend {
+        background-color: #f5f5f5;
+
+        &:hover {
+          background-color: $table-row-hover-background-color;
+        }
       }
     }
   }
