@@ -1,9 +1,15 @@
+import extend from 'lodash/extend'
+
 export default (state, emitter) => {
-  emitter.on('DOMContentLoaded', () => {
-    emitter.on('details:select-date', render)
+  state.events = extend(state.events, {
+    DETAILS_SELECTDATE: 'details:select-date'
+  })
+
+  emitter.on(state.events.DOMCONTENTLOADED, () => {
+    emitter.on(state.events.DETAILS_SELECTDATE, render)
   })
 
   function render () {
-    emitter.emit('render')
+    emitter.emit(state.events.RENDER)
   }
 }

@@ -96,6 +96,6 @@ export default (state, emit) => {
 
   function logout (e) {
     e.preventDefault()
-    emit('user:logout')
+    emit(state.events.USER_LOGOUT)
   }
 }

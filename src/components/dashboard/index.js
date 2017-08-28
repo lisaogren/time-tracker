@@ -137,8 +137,8 @@ export default (state, emit) => {
   // ----------------------
 
   function toggle () {
-    if (timer.started) emit('timer:stop')
-    else emit('timer:start')
+    if (timer.started) emit(state.events.TIMER_STOP)
+    else emit(state.events.TIMER_START)
   }
 
   // ----------------------

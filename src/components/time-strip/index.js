@@ -22,13 +22,17 @@ export default (date, entries, emit) => {
     </div>
   `
 
+  // ----------------------
+  // Sub-components
+  // ----------------------
+
   function workBlocks () {
     const blocks = []
 
     forEach(entries, (entry, i) => {
       let next = entries[i + 1]
 
-      if (isEven(i)) {
+      if (isEven(i) && next) {
         const left = oneHourInPercent * differenceInDecimalHours(entry.date, start)
         const width = (oneHourInPercent * differenceInDecimalHours(next.date, start)) - left
 

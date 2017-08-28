@@ -6,7 +6,6 @@ export default (state) => {
 
   // Fetch current user if any
   return api.me().then(res => {
-    log.debug(res.body)
     state.user.data = res.body
   })
 }

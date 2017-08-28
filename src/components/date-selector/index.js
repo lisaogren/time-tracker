@@ -66,7 +66,7 @@ export default (options) => {
   function onChange (e) {
     const $el = $(e.currentTarget)
 
-    emit('dateSelector:change', { type: $el.attr('data-type'), value: $el.value() })
+    emit(state.events.DATESELECTOR_CHANGE, { type: $el.attr('data-type'), value: $el.value() })
     emit(change)
   }
 

@@ -90,6 +90,6 @@ export default (state, emit) => {
 
     log.debug('[components/login] Submitted login form:', data)
 
-    emit('user:login', data)
+    emit(state.events.USER_LOGIN, data)
   }
 }

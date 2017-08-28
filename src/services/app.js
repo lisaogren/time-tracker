@@ -80,8 +80,8 @@ function middleware (service, state, emitter) {
 
   setCurrent()
 
-  emitter.on('DOMContentLoaded', () => {
-    emitter.on('pushState', setCurrent)
+  emitter.on(state.events.DOMCONTENTLOADED, () => {
+    emitter.on(state.events.PUSHSTATE, setCurrent)
   })
 
   function setCurrent () {

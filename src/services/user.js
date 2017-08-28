@@ -25,14 +25,23 @@ export default (state, emitter) => {
     state.user = extend({}, defaultState)
   }
 
+  state.events = extend(state.events, {
+    USER_LOGIN: 'user:login',
+    USER_LOGOUT: 'user:logout',
+    USER_REGISTER: 'user:register',
+    USER_REGISTER_RESET: 'user:register:reset',
+    USER_REGISTER_STORE: 'user:register:store',
+    USER_REFRESH: 'user:refresh'
+  })
+
   // Wait for DOM before registering emitter events to speed up first paint
-  emitter.on('DOMContentLoaded', () => {
-    emitter.on('user:login', login)
-    emitter.on('user:logout', logout)
-    emitter.on('user:register', register)
-    emitter.on('user:register:reset', resetRegister)
-    emitter.on('user:register:store', storeRegisterValue)
-    emitter.on('user:refresh', refreshUser)
+  emitter.on(state.events.DOMCONTENTLOADED, () => {
+    emitter.on(state.events.USER_LOGIN, login)
+    emitter.on(state.events.USER_LOGOUT, logout)
+    emitter.on(state.events.USER_REGISTER, register)
+    emitter.on(state.events.USER_REGISTER_RESET, resetRegister)
+    emitter.on(state.events.USER_REGISTER_STORE, storeRegisterValue)
+    emitter.on(state.events.USER_REFRESH, refreshUser)
   })
 
   // ----------------------
@@ -57,7 +66,7 @@ export default (state, emitter) => {
         state.user.data = user
         state.timer.entries = user.timeEntries
 
-        emitter.emit('pushState', '/')
+        emitter.emit(state.events.PUSHSTATE, '/')
       })
     }
 
@@ -70,7 +79,7 @@ export default (state, emitter) => {
     api.logout().then(() => {
       state.user = extend({}, defaultState)
 
-      emitter.emit('pushState', '/')
+      emitter.emit(state.events.PUSHSTATE, '/')
     })
   }
 
@@ -157,6 +166,6 @@ export default (state, emitter) => {
   }
 
   function render () {
-    emitter.emit('render')
+    emitter.emit(state.events.RENDER)
   }
 }

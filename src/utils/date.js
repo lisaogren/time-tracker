@@ -1,7 +1,9 @@
 import parseInt from 'lodash/parseInt'
 import filter from 'lodash/filter'
 import forEach from 'lodash/forEach'
+import partialRight from 'lodash/partialRight'
 
+import formatDate from 'date-fns/format'
 import getDay from 'date-fns/get_day'
 import getDate from 'date-fns/get_date'
 import getMonth from 'date-fns/get_month'
@@ -9,6 +11,8 @@ import getYear from 'date-fns/get_year'
 import addDays from 'date-fns/add_days'
 import eachDay from 'date-fns/each_day'
 import differenceInMilliseconds from 'date-fns/difference_in_milliseconds'
+
+import frLocale from 'date-fns/locale/fr'
 
 import { isEven } from './numbers'
 
@@ -23,6 +27,8 @@ export const differenceInDecimalHours = function differenceInDecimalHours (end, 
 export const getNoon = function getNoon (date) {
   return new Date(getYear(date), getMonth(date), getDate(date), 12)
 }
+
+export const format = partialRight(formatDate, { locale: frLocale })
 
 function millisecondsToDuration ({ time, showSign = false }) {
   const isNegative = time < 0

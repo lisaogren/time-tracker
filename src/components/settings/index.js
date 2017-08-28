@@ -65,7 +65,7 @@ export default (state, emit) => {
   function settingsSuccess () {
     if (!state.settings.success) return ''
 
-    emit('settings:reset')
+    emit(state.events.SETTINGS_RESET)
 
     return html`
       <div class="columns">
@@ -101,7 +101,7 @@ export default (state, emit) => {
 
     const data = serialize(e.currentTarget)
 
-    emit('settings:save', data)
+    emit(state.events.SETTINGS_SAVE, data)
   }
 
   function selectDate (e) {

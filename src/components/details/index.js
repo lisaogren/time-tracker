@@ -2,22 +2,31 @@ import html from 'choo/html'
 
 import map from 'lodash/map'
 import filter from 'lodash/filter'
-import groupBy from 'lodash/groupBy'
 
-import format from 'date-fns/format'
-import isSameMonth from 'date-fns/is_same_month'
+import { format } from 'utils/date'
+import eachDay from 'date-fns/each_day'
+import endOfMonth from 'date-fns/end_of_month'
+import startOfMonth from 'date-fns/start_of_month'
+import isSameDay from 'date-fns/is_same_day'
+import isWeekend from 'date-fns/is_weekend'
 
-// import log from 'utils/log'
+import log from 'utils/log'
 
 import timeStrip from 'components/time-strip'
 import dateSelector from 'components/date-selector'
 
-export default (state, emit) => {
-  const current = state.dateSelector
-  const currentlySelectedDate = new Date(current.year, current.month)
+import './index.scss'
 
-  const entries = groupEntries(
-    filter(state.timer.entries, entry => isSameMonth(entry.date, currentlySelectedDate))
+export default (state, emit) => {
+  log.debug('[components/details] Init component')
+
+  const current = state.dateSelector
+  const date = new Date(current.year, current.month)
+  const entries = state.timer.entries
+
+  const days = map(
+    eachDay(startOfMonth(date), endOfMonth(date)),
+    day => ({ date: day, entries: filter(entries, entry => isSameDay(entry.date, day)) })
   )
 
   return html`
@@ -37,7 +46,7 @@ export default (state, emit) => {
             </tr>
           </thead>
           <tbody>
-            ${map(entries, (list, date) => showEntryLine(date, list))}
+            ${map(days, showEntryLine)}
           </tbody>
         </table>
       </div>
@@ -48,39 +57,17 @@ export default (state, emit) => {
   // Sub-components
   // ----------------------
 
-  function showEntryLine (date, entries) {
+  function showEntryLine ({ date, entries }) {
     return html`
-      <tr>
-        <td>${format(date, 'DD/MM/YYYY')}</td>
+      <tr class="${isWeekend(date) ? 'is-weekend' : ''}">
+        <td>
+          ${format(date, 'dddd')}<br>
+          ${format(date, 'DD/MM/YYYY')}
+        </td>
         <td>
           ${timeStrip(date, entries, emit)}
         </td>
       </tr>
     `
-    // ${map(entries, entry => html`<div>${format(entry.date, 'HH:mm:ss')}</div>`)}
-  }
-
-  // ----------------------
-  // Listeners
-  // ----------------------
-
-  // function selectMonth (e) {
-  //   log.debug('Selected month:', e.currentTarget.value)
-  //
-  //   emit('details:month', e.currentTarget.value)
-  // }
-  //
-  // function selectYear (e) {
-  //   log.debug('Selected year', e.currentTarget.value)
-  //
-  //   emit('details:year', e.currentTarget.value)
-  // }
-
-  // ----------------------
-  // Helpers
-  // ----------------------
-
-  function groupEntries (entries) {
-    return groupBy(entries, entry => format(entry.date, 'YYYY-MM-DD'))
   }
 }
