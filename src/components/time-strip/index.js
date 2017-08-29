@@ -49,6 +49,7 @@ export default (date, entries, emit) => {
         class="column worked"
         data-start-id="${block.startId}"
         data-end-id="${block.endId}"
+        data-type="worked"
         style="left: ${block.left}%; width: ${block.width}%;"
       >
       </div>

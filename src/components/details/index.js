@@ -14,6 +14,7 @@ import isWeekend from 'date-fns/is_weekend'
 
 import log from 'utils/log'
 
+import editDetails from './edit'
 import timeStrip from 'components/time-strip'
 import dateSelector from 'components/date-selector'
 
@@ -61,6 +62,7 @@ export default (state, emit) => {
             ${map(days, showEntryLine)}
           </tbody>
         </table>
+        ${editDetails(state, emit)}
       </div>
     </section>
   `
@@ -70,7 +72,7 @@ export default (state, emit) => {
   // ----------------------
 
   function showEntryLine ({ date, entries }) {
-    const onClick = partial(edit, date, entries)
+    const onClick = partial(edit, date)
 
     return html`
       <tr class="entry ${isWeekend(date) ? 'is-weekend' : ''}" onclick=${onClick}>
@@ -89,12 +91,26 @@ export default (state, emit) => {
   // Listeners
   // ----------------------
 
-  function edit (date, entries, e) {
+  function edit (date, e) {
     e.preventDefault()
 
     const $el = $(e.target)
 
-    log.debug(`[components/details] Editing entries for ${date}`, entries)
-    log.debug($el.attr('data-start-id'), $el.attr('data-end-id'))
+    if ($el.attr('data-type') !== 'worked') {
+      return add(date)
+    }
+
+    log.debug(`[components/details] Editing entries for ${date}`)
+
+    const startId = $el.attr('data-start-id')
+    const endId = $el.attr('data-end-id')
+
+    emit(state.events.DETAILS_EDIT, { date, startId, endId })
+  }
+
+  function add (date) {
+    log.debug(`[components/details] Adding entries for ${date}`)
+
+    emit(state.events.DETAILS_ADD, { date })
   }
 }
