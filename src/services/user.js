@@ -1,3 +1,5 @@
+import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
 import extend from 'lodash/extend'
 import partial from 'lodash/partial'
 
@@ -161,6 +163,12 @@ export default (state, emitter) => {
 
   function storeUser (user) {
     state.user.data = user
+
+    // Extract entries data from user
+    const entries = get(state.user, 'data.timeEntries', [])
+
+    // Store entries
+    state.timer.entries = sortBy(entries, 'date')
 
     return user
   }

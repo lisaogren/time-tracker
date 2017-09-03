@@ -80,12 +80,19 @@ export default (state, emit) => {
   function submit (e) {
     e.preventDefault()
 
-    const data = {
-      start: $('[name=start-date]').value(),
-      end: $('[name=end-date]').value()
-    }
+    const { startId, endId } = data
 
-    console.log('Edit data', data)
+    emit(state.events.DETAILS_SAVE, {
+      edit,
+      start: {
+        id: startId,
+        date: $('[name=start-date]').value()
+      },
+      end: {
+        id: endId,
+        date: $('[name=end-date]').value()
+      }
+    })
   }
 
   function close () {
