@@ -23,9 +23,10 @@ import './index.scss'
 export default (state, emit) => {
   log.debug('[components/details] Init component')
 
-  const current = state.dateSelector.details || { year: 2017, month: 7 }
+  const current = state.dateSelector.details || state.dateSelector.default
   const date = new Date(current.year, current.month)
   const entries = state.timer.entries
+  const showEdit = Boolean(state.details.edit || state.details.add)
 
   const days = map(
     eachDay(startOfMonth(date), endOfMonth(date)),
@@ -62,7 +63,7 @@ export default (state, emit) => {
             ${map(days, showEntryLine)}
           </tbody>
         </table>
-        ${editDetails(state, emit)}
+        ${showEdit ? editDetails(state, emit) : ''}
       </div>
     </section>
   `

@@ -10,7 +10,9 @@ export default (state, emitter) => {
 
   const defaultState = { year: getYear(now), month: getMonth(now), day: getDate(now) }
 
-  state.dateSelector = {}
+  state.dateSelector = {
+    default: defaultState
+  }
 
   state.events = extend(state.events, {
     DATESELECTOR_CHANGE: 'dateSelector:change'

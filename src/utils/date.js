@@ -1,7 +1,12 @@
 import parseInt from 'lodash/parseInt'
 import filter from 'lodash/filter'
+import extend from 'lodash/extend'
 import forEach from 'lodash/forEach'
 import partialRight from 'lodash/partialRight'
+
+import flatpickr from 'flatpickr'
+import flatpickrLocale from 'flatpickr/dist/l10n/fr'
+import 'flatpickr/dist/flatpickr.min.css'
 
 import formatDate from 'date-fns/format'
 import getDay from 'date-fns/get_day'
@@ -20,6 +25,8 @@ const oneHourInMilliseconds = 1 * 60 * 60 * 1000
 const oneMinuteInMilliseconds = 1 * 60 * 1000
 const durationRegex = /^(\d{0,2})h?(\d{0,2})m?i?n?$/i
 
+flatpickr.localize(flatpickrLocale.fr)
+
 export const differenceInDecimalHours = function differenceInDecimalHours (end, start) {
   return differenceInMilliseconds(end, start) / oneHourInMilliseconds
 }
@@ -29,6 +36,10 @@ export const getNoon = function getNoon (date) {
 }
 
 export const format = partialRight(formatDate, { locale: frLocale })
+
+export const selector = (el, options = {}) => {
+  return flatpickr(el, extend({ enableTime: true, time_24hr: true }, options))
+}
 
 function millisecondsToDuration ({ time, showSign = false }) {
   const isNegative = time < 0

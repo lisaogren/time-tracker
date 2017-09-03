@@ -4,16 +4,17 @@ import forEach from 'lodash/forEach'
 import range from 'lodash/range'
 
 import startOfDay from 'date-fns/start_of_day'
+import setHours from 'date-fns/set_hours'
 
 import { differenceInDecimalHours } from 'utils/date'
 import { isEven } from 'utils/numbers'
 
 import './index.scss'
 
-const oneHourInPercent = 100 / 24
+const oneHourInPercent = 100 / 14
 
 export default (date, entries, emit) => {
-  const start = startOfDay(date)
+  const start = setHours(startOfDay(date), 6)
 
   return html`
     <div class="time-strip-component">
@@ -63,6 +64,6 @@ export default (date, entries, emit) => {
   }
 
   function scaleBlock (i) {
-    return html`<div class="column">${i}h</div>`
+    return html`<div class="column ${i < 6 || i > 19 ? 'is-hidden' : ''}">${i}h</div>`
   }
 }
