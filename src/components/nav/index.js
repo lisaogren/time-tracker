@@ -49,7 +49,7 @@ export default (state, emit) => {
           <a href="/profile" class="navbar-link">
             <div class="field is-grouped">
               <figure class="image is-16x16">
-                <img src="${user.gravatarUrl}" alt="Profile image" title="">
+                <img src="${user.gravatarUrl}" alt="" title="">
               </figure>
               <span>${user.username}</span>
             </div>
