@@ -4,11 +4,13 @@ import html from 'choo/html'
 import filter from 'lodash/filter'
 import first from 'lodash/first'
 import last from 'lodash/last'
+import find from 'lodash/find'
 import isEmpty from 'lodash/isEmpty'
 
 import isToday from 'date-fns/is_today'
 import isBefore from 'date-fns/is_before'
 import subDays from 'date-fns/sub_days'
+import isSameDay from 'date-fns/is_same_day'
 
 import date from 'utils/date'
 
@@ -157,14 +159,16 @@ export default (state, emit) => {
       end = now
       entries = filter(entries, entry => isToday(entry.date))
     } else if (type === 'total') {
+      const lastEntryDate = last(entries).date
+
       start = first(entries).date
-      end = subDays(last(entries).date, 1)
+      end = findPreviousWorkedDay(lastEntryDate, entries)
 
       if (isBefore(end, start)) {
         return 0
       }
 
-      entries = filter(entries, entry => !isToday(entry.date))
+      entries = filter(entries, entry => !isSameDay(entry.date, lastEntryDate))
     }
 
     return date.getWorkTimeBalance(start, end, entries)
@@ -174,5 +178,15 @@ export default (state, emit) => {
     const entries = filter(timer.entries, entry => isToday(entry.date))
 
     return date.getCumulatedWorkTime(entries)
+  }
+
+  function findPreviousWorkedDay (start, entries) {
+    start = subDays(start, 1)
+
+    if (!date.isWorkDay(start) || !find(entries, entry => isSameDay(entry.date, start))) {
+      return findPreviousWorkedDay(start, entries)
+    }
+
+    return start
   }
 }
