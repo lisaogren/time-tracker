@@ -7,7 +7,7 @@ import 'index.scss'
 import choo from 'choo'
 import chooLog from 'choo-log'
 
-// import sw from 'utils/sw'
+import sw from 'utils/sw'
 
 import appService from 'services/app'
 import bootService from 'services/boot'
@@ -20,7 +20,7 @@ import dateSelectorService from 'components/date-selector/service'
 const app = choo()
 
 // @TODO Re-activate
-// sw.register()
+sw.register()
 
 // if (debug) !
 app.use(chooLog())
