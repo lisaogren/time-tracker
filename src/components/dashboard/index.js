@@ -14,6 +14,8 @@ import isSameDay from 'date-fns/is_same_day'
 
 import date from 'utils/date'
 
+import balance from 'components/balance'
+
 import './index.scss'
 
 export default (state, emit) => {
@@ -55,26 +57,12 @@ export default (state, emit) => {
     `
   }
 
-  function showTime ({ value, showSign = false }) {
-    let type
-
-    if (showSign) {
-      if (value < 0) type = 'is-negative'
-      else if (value > 0) type = 'is-positive'
-      else showSign = false
-    }
-
-    return html`
-      <p class="${type}">${date.millisecondsToDuration({ time: value, showSign })}</p>
-    `
-  }
-
   function showBalance (type) {
-    return showTime({ value: balance(type), showSign: true })
+    return balance({ value: getBalance(type), showSign: true })
   }
 
   function showWorkTime () {
-    return showTime({ value: workTime() })
+    return balance({ value: workTime() })
   }
 
   function showDashboard () {
@@ -147,7 +135,7 @@ export default (state, emit) => {
   // Helpers
   // ----------------------
 
-  function balance (type) {
+  function getBalance (type) {
     const now = new Date()
 
     let entries = timer.entries
@@ -171,7 +159,7 @@ export default (state, emit) => {
       entries = filter(entries, entry => !isSameDay(entry.date, lastEntryDate))
     }
 
-    return date.getWorkTimeBalance(start, end, entries)
+    return date.getWorkTimeBalance(entries, start, end)
   }
 
   function workTime () {

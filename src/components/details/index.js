@@ -5,7 +5,7 @@ import map from 'lodash/map'
 import filter from 'lodash/filter'
 import partial from 'lodash/partial'
 
-import { format } from 'utils/date'
+import { format, getWorkTimeBalance } from 'utils/date'
 import eachDay from 'date-fns/each_day'
 import endOfMonth from 'date-fns/end_of_month'
 import startOfMonth from 'date-fns/start_of_month'
@@ -17,6 +17,7 @@ import log from 'utils/log'
 import editDetails from './edit'
 import timeStrip from 'components/time-strip'
 import dateSelector from 'components/date-selector'
+import balance from 'components/balance'
 
 import './index.scss'
 
@@ -74,12 +75,21 @@ export default (state, emit) => {
 
   function showEntryLine ({ date, entries }) {
     const onClick = partial(edit, date)
+    const workTime = getWorkTimeBalance(entries, date)
+
+    let balanceEl
+    if (workTime) balanceEl = balance({ value: workTime, showSign: true })
 
     return html`
       <tr class="entry ${isWeekend(date) ? 'is-weekend' : ''}" onclick=${onClick}>
-        <td>
-          ${format(date, 'dddd')}<br>
-          ${format(date, 'DD/MM/YYYY')}
+        <td class="entry-info">
+          <span class="date">
+            ${format(date, 'dddd')}<br>
+            ${format(date, 'DD/MM/YYYY')}
+          </span>
+          <span class="balance">
+            ${balanceEl}
+          </span>
         </td>
         <td>
           ${timeStrip(date, entries, emit)}
