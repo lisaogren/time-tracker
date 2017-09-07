@@ -11,8 +11,8 @@ module.exports = function (shipit) {
       deployTo,
       repositoryUrl: `git@github.com:RasCarlito/${name}.git`,
       keepReleases: 3,
-      branch: 'deploy',
-      ignores: ['.git', 'src'],
+      branch: 'details-edit',
+      ignores: ['.git', 'node_modules'],
       dirToCopy: `${workspace}`
     },
     production: {
@@ -40,9 +40,7 @@ module.exports = function (shipit) {
       })
   })
 
-  shipit.on('fetched', () => shipit.start('dependencies'))
-
-  shipit.on('deploy:finish', () => shipit.start('build'))
+  shipit.on('deployed', () => shipit.start('dependencies', 'build'))
 
   function run (cmd) {
     return `cd ${deployTo}/current && ${cmd}`
