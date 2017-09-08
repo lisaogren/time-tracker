@@ -21,6 +21,8 @@ import balance from 'components/balance'
 
 import './index.scss'
 
+const confirm = window.confirm
+
 export default (state, emit) => {
   log.debug('[components/details] Init component')
 
@@ -81,7 +83,7 @@ export default (state, emit) => {
     if (workTime) balanceEl = balance({ value: workTime, showSign: true })
 
     return html`
-      <tr class="entry ${isWeekend(date) ? 'is-weekend' : ''}" onclick=${onClick}>
+      <tr class="entry ${isWeekend(date) ? 'is-weekend' : ''}">
         <td class="entry-info">
           <span class="date">
             ${format(date, 'dddd')}<br>
@@ -90,8 +92,20 @@ export default (state, emit) => {
           <span class="balance">
             ${balanceEl}
           </span>
+          <span class="actions">
+            <a onclick=${partial(setNormalWorkTime, date)}>
+              <span class="icon">
+                <i class="fa fa-check"></i>
+              </span>
+            </a>
+            <a onclick=${partial(clearWorkTime, date)}>
+              <span clas="icon">
+                <i class="fa fa-close"></i>
+              </span>
+            </a>
+          </span>
         </td>
-        <td>
+        <td onclick=${onClick}>
           ${timeStrip(date, entries, emit)}
         </td>
       </tr>
@@ -123,5 +137,19 @@ export default (state, emit) => {
     log.debug(`[components/details] Adding entries for ${date}`)
 
     emit(state.events.DETAILS_ADD, { date })
+  }
+
+  function setNormalWorkTime (date, e) {
+    e.preventDefault()
+
+    emit(state.events.DETAILS_SET_NORMAL_WORK_TIME, date)
+  }
+
+  function clearWorkTime (date, e) {
+    e.preventDefault()
+
+    if (confirm(`Es-tu sûr de vouloir supprimer les entrées du ${format(date, 'DD/MM/YYYY')}`)) {
+      emit(state.events.DETAILS_CLEAR_DAY, date)
+    }
   }
 }

@@ -5,6 +5,12 @@
     .entry {
       cursor: pointer;
 
+      &:hover {
+        .entry-info .actions {
+          visibility: visible;
+        }
+      }
+
       .entry-info {
         display: flex;
         align-items: center;
@@ -14,9 +20,15 @@
           flex-grow: 0;
         }
 
-        .balance {
+        .balance, .actions {
           flex-grow: 1;
           text-align: center;
+        }
+
+        .actions {
+          visibility: hidden;
+          text-align: right;
+          padding-right: 1rem;
         }
       }
 
