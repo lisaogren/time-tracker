@@ -22,11 +22,6 @@ export default (state, emit) => {
     end = find(entries, { id: parseInt(endId) })
   }
 
-  defer(() => {
-    selector('[name=start-date]', { defaultDate: start.date || data.date })
-    selector('[name=end-date]', { defaultDate: end.date || data.date })
-  })
-
   return html`
     <form onsubmit=${submit}>
       <div class="modal is-active details-edit-component">
@@ -37,41 +32,66 @@ export default (state, emit) => {
             <button type="button" class="delete" aria-label="close" onclick=${close}></button>
           </header>
           <section class="modal-card-body">
-            <form onsubmit=${submit}>
-              <div class="field is-horizontal">
-                <div class="field-label is-normal">
-                  <label class="label">Début</label>
-                </div>
-                <div class="field-body">
-                  <div class="field">
-                    <div class="control">
-                      <input class="input" type="text" name="start-date" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="field is-horizontal">
-                <div class="field-label is-normal">
-                  <label class="label">Fin</label>
-                </div>
-                <div class="field-body">
-                  <div class="field">
-                    <div class="control">
-                      <input class="input" type="text" name="end-date" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </form>
+            ${dateField({ name: 'start-date', label: 'Début', date: start.date || data.date })}
+            ${dateField({ name: 'end-date', label: 'Fin', date: end.date || data.date })}
           </section>
           <footer class="modal-card-foot">
-            <button type="submit" class="button is-success">${edit ? 'Sauvegarder' : 'Ajouter'}</button>
-            <button type="button" class="button" onclick=${close}>Annuler</button>
+            <button type="submit" class="button is-success">
+              <span class="icon">
+                <i class="fa fa-check"></i>
+              </span>
+              <span>${edit ? 'Sauvegarder' : 'Ajouter'}</span>
+            </button>
+            ${deleteBtn()}
+            <button type="button" class="button" onclick=${close}>
+              <span class="icon">
+                <i class="fa fa-close"></i>
+              </span>
+              <span>Annuler</span>
+            </button>
           </footer>
         </div>
       </div>
     </form>
   `
+
+  // ----------------------
+  // Sub-components
+  // ----------------------
+
+  function dateField ({ name, label, date }) {
+    defer(() => {
+      selector(`[name=${name}]`, { defaultDate: date })
+    })
+
+    return html`
+      <div class="field is-horizontal">
+        <div class="field-label is-normal">
+          <label class="label">${label}</label>
+        </div>
+        <div class="field-body">
+          <div class="field">
+            <div class="control">
+              <input class="input" type="text" name="${name}" />
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  }
+
+  function deleteBtn () {
+    if (!edit) return
+
+    return html`
+      <button type="button" class="button is-danger" onclick=${del}>
+        <span class="icon">
+          <i class="fa fa-trash-o"></i>
+        </span>
+        <span>Supprimer</span>
+      </button>
+    `
+  }
 
   // ----------------------
   // Listeners
@@ -93,6 +113,12 @@ export default (state, emit) => {
         date: $('[name=end-date]').value()
       }
     })
+  }
+
+  function del () {
+    const { startId, endId } = data
+
+    emit(state.events.DETAILS_DELETE, { entries: [startId, endId] })
   }
 
   function close () {

@@ -52,6 +52,7 @@ export default (date, entries, emit) => {
         data-end-id="${block.endId}"
         data-type="worked"
         style="left: ${block.left}%; width: ${block.width}%;"
+        title="Click pour modifier cette période"
       >
       </div>
     `

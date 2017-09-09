@@ -21,6 +21,7 @@ export default (state, emitter) => {
     DETAILS_EDIT: 'details:edit',
     DETAILS_ADD: 'details:add',
     DETAILS_SAVE: 'details:save',
+    DETAILS_DELETE: 'details:delete',
     DETAILS_CLOSE: 'details:close',
     DETAILS_CLEAR_DAY: 'details:clear-day',
     DETAILS_SET_NORMAL_WORK_TIME: 'details:set-normal-work-time'
@@ -31,6 +32,7 @@ export default (state, emitter) => {
     emitter.on(state.events.DETAILS_EDIT, edit)
     emitter.on(state.events.DETAILS_ADD, add)
     emitter.on(state.events.DETAILS_SAVE, save)
+    emitter.on(state.events.DETAILS_DELETE, del)
     emitter.on(state.events.DETAILS_CLOSE, close)
     emitter.on(state.events.DETAILS_CLEAR_DAY, clearDay)
     emitter.on(state.events.DETAILS_SET_NORMAL_WORK_TIME, setNormalWorkTime)
@@ -70,6 +72,12 @@ export default (state, emitter) => {
       clear()
       emitter.emit(state.events.USER_REFRESH)
     })
+  }
+
+  function del ({ entries }) {
+    return Promise.map(entries, id => api.deleteEntry({ params: { id } }))
+      .then(clear)
+      .then(() => emitter.emit(state.events.USER_REFRESH))
   }
 
   function close () {

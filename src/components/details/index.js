@@ -80,20 +80,9 @@ export default (state, emit) => {
     const workTime = getWorkTimeBalance(entries, date)
 
     let balanceEl
-    let deleteBtn
 
     if (workTime) {
       balanceEl = balance({ value: workTime, showSign: true })
-    }
-
-    if (entries.length) {
-      deleteBtn = html`
-        <button class="button is-danger is-inverted" onclick=${partial(clearWorkTime, date)}>
-          <span clas="icon">
-            <i class="fa fa-close"></i>
-          </span>
-        </button>
-      `
     }
 
     return html`
@@ -109,16 +98,32 @@ export default (state, emit) => {
           <span class="actions">
             <button class="button is-primary is-inverted" onclick=${partial(setNormalWorkTime, date)}>
               <span class="icon">
-                <i class="fa fa-check"></i>
+                <i class="fa fa-plus"></i>
               </span>
             </button>
-            ${deleteBtn}
+            ${deleteBtn(date, entries)}
           </span>
         </td>
-        <td onclick=${onClick}>
+        <td class="time-strip-container" onclick=${onClick} title="Click pour ajouter une période">
           ${timeStrip(date, entries, emit)}
         </td>
       </tr>
+    `
+  }
+
+  // ----------------------
+  // Sub-components
+  // ----------------------
+
+  function deleteBtn (date, entries) {
+    if (!entries.length) return
+
+    return html`
+      <button class="button is-danger is-inverted" onclick=${partial(clearWorkTime, date)}>
+        <span clas="icon">
+          <i class="fa fa-trash-o"></i>
+        </span>
+      </button>
     `
   }
 

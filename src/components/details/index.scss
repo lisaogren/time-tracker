@@ -3,8 +3,6 @@
 .details-component {
   .entries {
     .entry {
-      cursor: pointer;
-
       &:hover {
         .entry-info .actions {
           visibility: visible;
@@ -42,9 +40,18 @@
     }
   }
 
+  .time-strip-container {
+    cursor: pointer;
+    width: 65%;
+  }
+
   .details-edit-component {
     .modal-card-foot {
       justify-content: center;
+
+      button .fa {
+        font-size: 1rem;
+      }
     }
   }
 }
