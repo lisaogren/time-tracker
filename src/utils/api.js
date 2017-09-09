@@ -6,9 +6,9 @@ import Promise from 'bluebird'
 
 const config = {
   // @TODO Move to a config file
-  host: 'http://localhost:3000',
+  // host: 'http://localhost:3000',
   // host: 'http://time-tracker.localhost',
-  // host: 'https://time-tracker.carlogren.com',
+  host: 'https://time-tracker.carlogren.com',
   services: {
     login: {
       path: '/auth/local',
