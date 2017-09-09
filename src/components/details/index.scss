@@ -2,11 +2,55 @@
 
 .details-component {
   .entries {
-    .is-weekend {
-      background-color: #f5f5f5;
-
+    .entry {
       &:hover {
-        background-color: $table-row-hover-background-color;
+        .entry-info .actions {
+          visibility: visible;
+        }
+      }
+
+      .entry-info {
+        display: flex;
+        align-items: center;
+        // justify-content: space-around;
+
+        .date {
+          flex-grow: 0;
+        }
+
+        .balance, .actions {
+          flex-grow: 1;
+          text-align: center;
+        }
+
+        .actions {
+          visibility: hidden;
+          text-align: right;
+          padding-right: 1rem;
+        }
+      }
+
+      &.is-weekend {
+        background-color: #f5f5f5;
+
+        &:hover {
+          background-color: $table-row-hover-background-color;
+        }
+      }
+    }
+  }
+
+  .time-strip-container {
+    cursor: pointer;
+    width: 65%;
+  }
+
+  .details-edit-component {
+    .modal-card-foot {
+      justify-content: center;
+
+      button .fa {
+        font-size: 1rem;
       }
     }
   }

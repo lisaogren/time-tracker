@@ -4,13 +4,17 @@ import html from 'choo/html'
 import filter from 'lodash/filter'
 import first from 'lodash/first'
 import last from 'lodash/last'
+import find from 'lodash/find'
 import isEmpty from 'lodash/isEmpty'
 
 import isToday from 'date-fns/is_today'
 import isBefore from 'date-fns/is_before'
 import subDays from 'date-fns/sub_days'
+import isSameDay from 'date-fns/is_same_day'
 
 import date from 'utils/date'
+
+import balance from 'components/balance'
 
 import './index.scss'
 
@@ -53,26 +57,12 @@ export default (state, emit) => {
     `
   }
 
-  function showTime ({ value, showSign = false }) {
-    let type
-
-    if (showSign) {
-      if (value < 0) type = 'is-negative'
-      else if (value > 0) type = 'is-positive'
-      else showSign = false
-    }
-
-    return html`
-      <p class="${type}">${date.millisecondsToDuration({ time: value, showSign })}</p>
-    `
-  }
-
   function showBalance (type) {
-    return showTime({ value: balance(type), showSign: true })
+    return balance({ value: getBalance(type), showSign: true })
   }
 
   function showWorkTime () {
-    return showTime({ value: workTime() })
+    return balance({ value: workTime() })
   }
 
   function showDashboard () {
@@ -145,7 +135,7 @@ export default (state, emit) => {
   // Helpers
   // ----------------------
 
-  function balance (type) {
+  function getBalance (type) {
     const now = new Date()
 
     let entries = timer.entries
@@ -157,22 +147,34 @@ export default (state, emit) => {
       end = now
       entries = filter(entries, entry => isToday(entry.date))
     } else if (type === 'total') {
+      const lastEntryDate = last(entries).date
+
       start = first(entries).date
-      end = subDays(last(entries).date, 1)
+      end = findPreviousWorkedDay(lastEntryDate, entries)
 
       if (isBefore(end, start)) {
         return 0
       }
 
-      entries = filter(entries, entry => !isToday(entry.date))
+      entries = filter(entries, entry => !isSameDay(entry.date, lastEntryDate))
     }
 
-    return date.getWorkTimeBalance(start, end, entries)
+    return date.getWorkTimeBalance(entries, start, end)
   }
 
   function workTime () {
     const entries = filter(timer.entries, entry => isToday(entry.date))
 
     return date.getCumulatedWorkTime(entries)
+  }
+
+  function findPreviousWorkedDay (start, entries) {
+    start = subDays(start, 1)
+
+    if (!date.isWorkDay(start) || !find(entries, entry => isSameDay(entry.date, start))) {
+      return findPreviousWorkedDay(start, entries)
+    }
+
+    return start
   }
 }

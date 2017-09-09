@@ -37,6 +37,14 @@ const config = {
     addEntry: {
       path: '/api/timeEntries',
       method: 'post'
+    },
+    updateEntry: {
+      path: '/api/timeEntries/:id',
+      method: 'put'
+    },
+    deleteEntry: {
+      path: '/api/timeEntries/:id',
+      method: 'del'
     }
   }
 }

@@ -3,15 +3,16 @@ module.exports = function (shipit) {
 
   const name = 'time-tracker'
   const workspace = `/tmp/shipit/${name}`
+  const deployTo = `/home/rascarlito/www/${name}`
 
   shipit.initConfig({
     default: {
       workspace,
-      deployTo: `/home/rascarlito/www/${name}`,
+      deployTo,
       repositoryUrl: `git@github.com:RasCarlito/${name}.git`,
       keepReleases: 3,
-      branch: 'deploy',
-      ignores: ['.git', 'src'],
+      branch: 'master',
+      ignores: ['.git', 'node_modules'],
       dirToCopy: `${workspace}`
     },
     production: {
@@ -20,7 +21,7 @@ module.exports = function (shipit) {
   })
 
   shipit.blTask('dependencies', () => {
-    return shipit.local(run('npm install'))
+    return shipit.remote(run('npm install'))
       .then(() => {
         shipit.log('Successfully installed dependencies')
       })
@@ -30,7 +31,7 @@ module.exports = function (shipit) {
   })
 
   shipit.blTask('build', () => {
-    return shipit.local(run('npm run build'))
+    return shipit.remote(run('npm run build'))
       .then(() => {
         shipit.log('Successfully built the project')
       })
@@ -39,11 +40,9 @@ module.exports = function (shipit) {
       })
   })
 
-  shipit.on('fetched', () => {
-    shipit.start('dependencies', 'build')
-  })
+  shipit.on('deployed', () => shipit.start('dependencies', 'build'))
 
   function run (cmd) {
-    return `cd ${workspace} && ${cmd}`
+    return `cd ${deployTo}/current && ${cmd}`
   }
 }

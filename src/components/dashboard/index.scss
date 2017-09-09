@@ -13,23 +13,6 @@
           padding-left: 1rem;
         }
       }
-
-      p {
-        font-size: 1.1rem;
-        color: $text;
-
-        // @media screen and (max-width: $tablet) {
-        //   font-size: 1.3rem;
-        // }
-
-        &.is-negative {
-          color: $red;
-        }
-
-        &.is-positive {
-          color: $turquoise;
-        }
-      }
     }
   }
 }

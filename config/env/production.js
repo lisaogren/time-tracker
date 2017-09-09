@@ -39,6 +39,10 @@ module.exports = {
     webpack: false
   },
 
+  cors: {
+    origin: 'https://time-tracker.carlogren.com'
+  },
+
   appUrl: 'https://time-tracker.carlogren.com'
   // appUrl: 'http://time-tracker.localhost'
 

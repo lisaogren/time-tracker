@@ -1,7 +1,12 @@
 import parseInt from 'lodash/parseInt'
 import filter from 'lodash/filter'
+import extend from 'lodash/extend'
 import forEach from 'lodash/forEach'
 import partialRight from 'lodash/partialRight'
+
+import flatpickr from 'flatpickr'
+import flatpickrLocale from 'flatpickr/dist/l10n/fr'
+import 'flatpickr/dist/flatpickr.min.css'
 
 import formatDate from 'date-fns/format'
 import getDay from 'date-fns/get_day'
@@ -20,17 +25,23 @@ const oneHourInMilliseconds = 1 * 60 * 60 * 1000
 const oneMinuteInMilliseconds = 1 * 60 * 1000
 const durationRegex = /^(\d{0,2})h?(\d{0,2})m?i?n?$/i
 
-export const differenceInDecimalHours = function differenceInDecimalHours (end, start) {
+flatpickr.localize(flatpickrLocale.fr)
+
+export function differenceInDecimalHours (end, start) {
   return differenceInMilliseconds(end, start) / oneHourInMilliseconds
 }
 
-export const getNoon = function getNoon (date) {
+export function getNoon (date) {
   return new Date(getYear(date), getMonth(date), getDate(date), 12)
 }
 
 export const format = partialRight(formatDate, { locale: frLocale })
 
-function millisecondsToDuration ({ time, showSign = false }) {
+export function selector (el, options = {}) {
+  return flatpickr(el, extend({ enableTime: true, time_24hr: true }, options))
+}
+
+export function millisecondsToDuration ({ time, showSign = false }) {
   const isNegative = time < 0
   time = Math.abs(time)
 
@@ -57,7 +68,7 @@ function millisecondsToDuration ({ time, showSign = false }) {
   return (showSign ? negative : '') + value
 }
 
-function durationToMilliseconds (duration = '') {
+export function durationToMilliseconds (duration = '') {
   const matches = duration.match(durationRegex)
 
   let hours = matches[1]
@@ -77,7 +88,7 @@ function durationToMilliseconds (duration = '') {
   return (hours * oneHourInMilliseconds) + (minutes * oneMinuteInMilliseconds)
 }
 
-function isWorkDay (date) {
+export function isWorkDay (date) {
   const dayNumber = getDay(date)
   const day = getDate(date)
   const month = getMonth(date)
@@ -103,11 +114,13 @@ function isWorkDay (date) {
     !(day === pentecoteDay && month === pentecoteMonth)   // exclude pentecote
 }
 
-function getWorkDays (start, end) {
+export function getWorkDays (start, end) {
   return filter(eachDay(start, end), day => isWorkDay(day))
 }
 
-function getWorkTimeBalance (start, end, entries) {
+export function getWorkTimeBalance (entries, start, end) {
+  if (!end) end = start
+
   const days = getWorkDays(start, end)
   const max = days.length * (7.5 * oneHourInMilliseconds)
 
@@ -116,7 +129,7 @@ function getWorkTimeBalance (start, end, entries) {
   return workTime - max
 }
 
-function getCumulatedWorkTime (entries) {
+export function getCumulatedWorkTime (entries) {
   let done = 0
 
   forEach(entries, (entry, i) => {
@@ -132,7 +145,7 @@ function getCumulatedWorkTime (entries) {
   return done
 }
 
-function getEasterByYear (year) {
+export function getEasterByYear (year) {
   var a = (year / 100 | 0) * 1483 - (year / 400 | 0) * 2225 + 2613
   var b = ((year % 19 * 3510 + (a / 25 | 0) * 319) / 330 | 0) % 29
   var c = 148 - b - ((year * 5 / 4 | 0) + a - b) % 7
@@ -146,11 +159,14 @@ function getEasterByYear (year) {
 
 export default {
   differenceInDecimalHours,
+  getNoon,
+  format,
+  selector,
   millisecondsToDuration,
   durationToMilliseconds,
   isWorkDay,
+  getWorkDays,
   getWorkTimeBalance,
   getCumulatedWorkTime,
-  getEasterByYear,
-  getNoon
+  getEasterByYear
 }
