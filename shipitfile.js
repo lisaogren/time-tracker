@@ -11,7 +11,7 @@ module.exports = function (shipit) {
       deployTo,
       repositoryUrl: `git@github.com:RasCarlito/${name}.git`,
       keepReleases: 3,
-      branch: 'details-edit',
+      branch: 'master',
       ignores: ['.git', 'node_modules'],
       dirToCopy: `${workspace}`
     },
