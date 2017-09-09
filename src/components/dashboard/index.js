@@ -70,7 +70,7 @@ export default (state, emit) => {
       <div>
         <h1 class="title has-text-centered">
           <span class="icon is-medium">
-            <i class="fa fa-clock-o"></i>
+            <i class="fa fa-area-chart"></i>
           </span>
           <span>Résumé</span>
         </h1>

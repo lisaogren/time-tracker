@@ -11,10 +11,7 @@ export default () => {
         <div class="content has-text-centered">
           <p>
             Time Tracker te permet de suivre quotidiennement le temps que tu passes au travail,
-            de calculer tes heures supplémentaires, tes congés, tes RTT.
-          </p>
-          <p>
-            Ne stresses plus à l'idée de ne pas savoir si tu as rempli les heures requises par ton contrat.
+            de calculer tes heures supplémentaires, tes congés, tes RTT
           </p>
         </div>
         <div class="columns">
@@ -27,9 +24,7 @@ export default () => {
                   </span>
                 </div>
                 <div class="content">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Phasellus nec iaculis mauris. <a>@bulmaio</a>.<br>
-                  <a href="#">#css</a> <a href="#">#responsive</a>
+                  Système simple start/stop. Aucune perte de temps
                 </div>
               </div>
             </div>
@@ -43,9 +38,7 @@ export default () => {
                   </span>
                 </div>
                 <div class="content">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Phasellus nec iaculis mauris. <a>@bulmaio</a>.<br>
-                  <a href="#">#css</a> <a href="#">#responsive</a>
+                  Résumé pratique pour rapidement savoir ta situation
                 </div>
               </div>
             </div>
@@ -59,9 +52,7 @@ export default () => {
                   </span>
                 </div>
                 <div class="content">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Phasellus nec iaculis mauris. <a>@bulmaio</a>.<br>
-                  <a href="#">#css</a> <a href="#">#responsive</a>
+                  Détails éditable facile à naviguer pour les plus pointilleux
                 </div>
               </div>
             </div>

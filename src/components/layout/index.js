@@ -8,13 +8,16 @@ export default (route, page, state, emit) => {
   const isLoading = state.app.loading
   const isRestricted = route.private && !state.user.data && !isLoading
 
-  if (isLoading || isRestricted) {
+  if (isLoading || isRestricted || !page) {
     if (isRestricted) {
       setTimeout(() => emit(state.events.REPLACESTATE, '/'), 0)
     }
 
     return html`
       <body>
+        ${nav(state, emit)}
+        <main></main>
+        ${footer()}
         ${showLoading()}
       </body>
     `

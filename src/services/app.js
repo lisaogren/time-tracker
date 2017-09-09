@@ -52,7 +52,7 @@ const appService = {
           this.emitter.emit('render')
         })
 
-        return html`<body></body>`
+        return layout(route, null, ...args)
       }
 
       return this.pages[route.page](...args)
