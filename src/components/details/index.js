@@ -80,7 +80,21 @@ export default (state, emit) => {
     const workTime = getWorkTimeBalance(entries, date)
 
     let balanceEl
-    if (workTime) balanceEl = balance({ value: workTime, showSign: true })
+    let deleteBtn
+
+    if (workTime) {
+      balanceEl = balance({ value: workTime, showSign: true })
+    }
+
+    if (entries.length) {
+      deleteBtn = html`
+        <button class="button is-danger is-inverted" onclick=${partial(clearWorkTime, date)}>
+          <span clas="icon">
+            <i class="fa fa-close"></i>
+          </span>
+        </button>
+      `
+    }
 
     return html`
       <tr class="entry ${isWeekend(date) ? 'is-weekend' : ''}">
@@ -93,16 +107,12 @@ export default (state, emit) => {
             ${balanceEl}
           </span>
           <span class="actions">
-            <a onclick=${partial(setNormalWorkTime, date)}>
+            <button class="button is-primary is-inverted" onclick=${partial(setNormalWorkTime, date)}>
               <span class="icon">
                 <i class="fa fa-check"></i>
               </span>
-            </a>
-            <a onclick=${partial(clearWorkTime, date)}>
-              <span clas="icon">
-                <i class="fa fa-close"></i>
-              </span>
-            </a>
+            </button>
+            ${deleteBtn}
           </span>
         </td>
         <td onclick=${onClick}>
@@ -142,13 +152,24 @@ export default (state, emit) => {
   function setNormalWorkTime (date, e) {
     e.preventDefault()
 
-    emit(state.events.DETAILS_SET_NORMAL_WORK_TIME, date)
+    const hasEntries = filter(entries, entry => isSameDay(entry.date, date))
+
+    let needsConfirm = Boolean(hasEntries.length)
+    let userConfirm = true
+
+    if (needsConfirm) {
+      userConfirm = confirm(
+        `Es-tu sûr de vouloir remplacer les entrées actuelles du ${format(date, 'DD MMMM YYYY')} ?`
+      )
+    }
+
+    if (userConfirm) emit(state.events.DETAILS_SET_NORMAL_WORK_TIME, date)
   }
 
   function clearWorkTime (date, e) {
     e.preventDefault()
 
-    if (confirm(`Es-tu sûr de vouloir supprimer les entrées du ${format(date, 'DD/MM/YYYY')}`)) {
+    if (confirm(`Es-tu sûr de vouloir supprimer les entrées du ${format(date, 'DD MMMM YYYY')} ?`)) {
       emit(state.events.DETAILS_CLEAR_DAY, date)
     }
   }

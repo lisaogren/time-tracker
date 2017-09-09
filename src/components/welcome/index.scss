@@ -1,0 +1,20 @@
+.welcome-component {
+  .columns {
+    margin-top: 2rem;
+  }
+
+  .card {
+    .media {
+      justify-content: center;
+
+      .icon {
+        width: auto;
+        height: auto;
+
+        .fa {
+          font-size: 8rem;
+        }
+      }
+    }
+  }
+}

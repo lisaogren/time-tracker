@@ -1,8 +1,8 @@
-export const isOdd = n => {
+export function isOdd (n) {
   return Boolean(n % 2)
 }
 
-export const isEven = n => {
+export function isEven (n) {
   return !isOdd(n)
 }
 
