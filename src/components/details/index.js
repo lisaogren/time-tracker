@@ -49,7 +49,12 @@ export default (state, emit) => {
   return html`
     <section class="section details-component">
       <div class="container">
-        <h1 class="title has-text-centered">Détails</h1>
+        <h1 class="title has-text-centered">
+          <span class="icon is-medium">
+            <i class="fa fa-table"></i>
+          </span>
+          <span>Détails</span>
+        </h1>
         <hr>
         <form>
           ${detailsDateSelector}

@@ -6,7 +6,12 @@ export default () => {
   return html`
     <section class="section welcome-component">
       <div class="container">
-        <h1 class="title has-text-centered">Bienvenue sur Time Tracker !</h1>
+        <h1 class="title has-text-centered">
+          <span class="icon is-medium">
+            <i class="fa fa-rocket"></i>
+          </span>
+          <span>Bienvenue sur Time Tracker</span>
+        </h1>
         <hr>
         <div class="content has-text-centered">
           <p>
@@ -24,7 +29,7 @@ export default () => {
                   </span>
                 </div>
                 <div class="content">
-                  Système simple start/stop. Aucune perte de temps
+                  Système start/stop simple. Aucune perte de temps
                 </div>
               </div>
             </div>
