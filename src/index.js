@@ -6,6 +6,7 @@ import 'index.scss'
 
 import choo from 'choo'
 import chooLog from 'choo-log'
+import chooDevTools from 'choo-devtools'
 
 // import sw from 'utils/sw'
 
@@ -23,7 +24,10 @@ const app = choo()
 // sw.register()
 
 // if (debug) !
-app.use(chooLog())
+if (process.env.NODE_ENV !== 'production') {
+  app.use(chooLog())
+  app.use(chooDevTools())
+}
 
 app.use(bootService)
 app.use(userService)
